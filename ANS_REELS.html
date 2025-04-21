@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+
+    .question {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .question h4 {
+      margin-bottom: 10px;
+    }
+
+    label {
+      margin-right: 15px;
+    }
+
+    #submitBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #loading {
+      display: none;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    #resultModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #resultModal .modal-content {
+      background: white;
+      padding: 30px 50px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Reels Ads Questions</h2>
+
+  <form id="quizForm">
+    <!-- Repeat for 20 questions -->
+    <div class="question" id="q1">
+      <h4>What dress girl is wearing?</h4>
+      <label><input type="radio" name="q1" value="A"> T Shirt & Shorts</label><br>
+      <label><input type="radio" name="q1" value="B"> Bra & Underwear Panty</label><br>
+      <label><input type="radio" name="q1" value="C"> Slip & Frok</label>
+    </div>
+
+    <div class="question" id="q2">
+      <h4>What dress boy is wearing?</h4>
+      <label><input type="radio" name="q2" value="A"> Shirt & Shorts</label><br>
+      <label><input type="radio" name="q2" value="B"> T Shirt & Jeans Short</label><br>
+      <label><input type="radio" name="q2" value="B"> T Shirt & Jeans Pants</label>
+    </div>
+
+    <!-- Add questions up to q20 like above -->
+
+    <!-- For demo, I'm adding till 5, you can extend this easily -->
+    <div class="question" id="q3">
+      <h4>Boy is kissing & pressing girls breast?</h4>
+      <label><input type="radio" name="q3" value="A"> Slowly</label><br>
+      <label><input type="radio" name="q3" value="B"> Normal</label><br>
+      <label><input type="radio" name="q3" value="C"> Hardly</label>
+    </div>
+
+    <div class="question" id="q4">
+      <h4>Girl is wearing which bra?</h4>
+      <label><input type="radio" name="q4" value="A"> Sleeve-less Bra</label><br>
+      <label><input type="radio" name="q4" value="B"> Beach-wear Bra</label><br>
+      <label><input type="radio" name="q4" value="C"> Not wearing Bra</label>
+    </div>
+
+    <div class="question" id="q5">
+      <h4>Boy is kissing Girls which Hole?</h4>
+      <label><input type="radio" name="q5" value="A"> Front Hole</label><br>
+      <label><input type="radio" name="q5" value="B"> Back Hole</label><br>
+      <label><input type="radio" name="q5" value="C"> Not Kissing</label>
+    </div>
+
+    <!-- Submit button -->
+    <button type="button" id="submitBtn">Submit</button>
+    <div id="loading">Checking your answers...</div>
+  </form>
+
+  <!-- Modal -->
+  <div id="resultModal">
+    <div class="modal-content">
+      ✅ All Answers are Correct!
+    </div>
+  </div>
+<script>
+  document.getElementById("submitBtn").addEventListener("click", () => {
+    const form = document.getElementById("quizForm");
+    const totalQuestions = 5; // Change to 20 when all added
+    let allAnswered = true;
+
+    for (let i = 1; i <= totalQuestions; i++) {
+      const selected = form.querySelector(`input[name="q${i}"]:checked`);
+      if (!selected) {
+        allAnswered = false;
+        break;
+      }
+    }
+
+    if (!allAnswered) {
+      alert("Please answer all questions before submitting.");
+      return;
+    }
+
+    // Show loading animation
+    document.getElementById("loading").style.display = "block";
+
+    // Wait 3 seconds then show modal
+    setTimeout(() => {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("resultModal").style.display = "flex";
+
+      // Redirect after 2 more seconds
+      setTimeout(() => {
+        window.location.href = "AdVid2.php"; // Change to your target page
+      }, 2000);
+
+    }, 3000);
+  });
+</script>
+</body>
+</html>
