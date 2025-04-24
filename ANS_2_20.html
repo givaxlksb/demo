@@ -2,298 +2,335 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quiz Page</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background: #f0f0f0;
+      background-color: #f4f4f9;
     }
-
-    .question {
-      background: #fff;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .question-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
     }
-
-    .question h4 {
-      margin-bottom: 10px;
-    }
-
-    label {
-      margin-right: 15px;
-    }
-
-    #submitBtn {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #loading {
-      display: none;
-      margin-top: 20px;
+    .question-card p {
       font-size: 18px;
-      color: #27ae60;
       font-weight: bold;
     }
-
-    #resultModal {
+    .options {
+      margin-top: 10px;
+    }
+    .submit-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #45a049;
+    }
+    .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .modal.show {
+      display: flex;
       justify-content: center;
       align-items: center;
+      opacity: 1;
     }
-
-    #resultModal .modal-content {
-      background: white;
-      padding: 30px 50px;
-      border-radius: 8px;
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
       text-align: center;
-      font-size: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      font-size: 18px;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
-
-  <h2>Video Ad (2) Questions</h2>
-
+  <h2>Video Ad (1) Questions</h2>
   <form id="quizForm">
-    <!-- Repeat for 20 questions -->
-    <div class="question" id="q1">
-      <h4>What dress girl is wearing?</h4>
-      <label><input type="radio" name="q1" value="A"> T Shirt & Shorts</label><br>
-      <label><input type="radio" name="q1" value="B"> Bra & Underwear Panty</label><br>
-      <label><input type="radio" name="q1" value="C"> Slip & Shorts</label>
-    </div>
-
-        <div class="question" id="q3">
-      <h4>Boy is pressing girls breast?</h4>
-      <label><input type="radio" name="q3" value="A"> Slowly Pressing</label><br>
-      <label><input type="radio" name="q3" value="C"> Hardly Pressing</label><br>
-     <label><input type="radio" name="q3" value="C"> Not kissing & pressing</label>
-
-    </div>
-    
-    <div class="question" id="q2">
-      <h4>What dress boy is wearing?</h4>
-      <label><input type="radio" name="q2" value="A"> Shirt & Shorts</label><br>
-      <label><input type="radio" name="q2" value="B"> T Shirt & Jeans Short</label><br>
-      <label><input type="radio" name="q2" value="B"> T Shirt & Jeans Pants</label>
-    </div>
-
-    <!-- Add questions up to q20 like above -->
-
-    <!-- For demo, I'm adding till 5, you can extend this easily -->
-
-
-    <div class="question" id="q4">
-      <h4>Girl is wearing which bra?</h4>
-      <label><input type="radio" name="q4" value="A"> Sleeve-less Bra</label><br>
-      <label><input type="radio" name="q4" value="B"> Beach-wear Bra</label><br>
-      <label><input type="radio" name="q4" value="C"> Not wearing Bra</label>
-    </div>
-
-    <div class="question" id="q5">
-      <h4>Boy is Tasting Girls which Hole?</h4>
-      <label><input type="radio" name="q5" value="A"> Front Hole</label><br>
-      <label><input type="radio" name="q5" value="B"> Back Hole</label><br>
-      <label><input type="radio" name="q5" value="C"> Not Tasting</label>
-    </div>
-
-        <div class="question" id="q6">
-      <h4>Girl is having Nipple on Breast</h4>
-      <label><input type="radio" name="q6" value="A">Black Nipple</label><br>
-      <label><input type="radio" name="q6" value="A">White Nipple</label><br>
-    </div>
-
-     <div class="question" id="q7">
-      <h4>Girl Breast size</h4>
-      <label><input type="radio" name="q7" value="A"> Small</label><br>
-      <label><input type="radio" name="q7" value="B"> Medium</label><br>
-      <label><input type="radio" name="q7" value="C"> Big</label>
-    </div>
-
-         <div class="question" id="q8">
-      <h4>Girl Takes Boy Pennis to Mouth?</h4>
-      <label><input type="radio" name="q8" value="A"> Yes</label><br>
-      <label><input type="radio" name="q8" value="B"> No</label>
-    </div>
-
-            <div class="question" id="q99">
-      <h4>Girl Takes Boy Pennis to Mouth?</h4>
-      <label><input type="radio" name="q15" value="A"> Boy has more joy & happy</label><br>
-      <label><input type="radio" name="q15" value="B"> Girl has more joy & happy</label><br>
-    </div>
-
-    <div class="question" id="q9">
-      <h4>What is inside Girls Mouth?</h4>
-      <label><input type="radio" name="q9" value="A"> Boys Pennis White Cream</label><br>
-      <label><input type="radio" name="q9" value="B"> Boys Pennis Gel</label>
-    </div>
-
-    <div class="question" id="q10">
-      <h4>Who has Tatoo on the body?</h4>
-      <label><input type="radio" name="q10" value="A">Only Boy</label><br>
-      <label><input type="radio" name="q10" value="B">Only Girl</label><br>
-       <label><input type="radio" name="q10" value="B">Both Boy & Girl</label>
-
-    </div>
-    
-    <div class="question" id="q11">
-      <h4>What Boy puts into Girls Front Hole vagina?</h4>
-      <label><input type="radio" name="q11" value="A"> Mouth Gel</label><br>
-      <label><input type="radio" name="q11" value="B"> Pennis Gel</label><br>
-      <label><input type="radio" name="q11" value="B"> Pennis White Cream</label>
-
-    </div>
-
-    <div class="question" id="q12">
-      <h4>Boy puts finger into Girls Front Hole vagina?</h4>
-      <label><input type="radio" name="q12" value="A"> Yes</label><br>
-      <label><input type="radio" name="q12" value="B"> No</label>
-
-    </div>
-
-    <div class="question" id="q122">
-      <h4>Why Girl Rubs finger on her Front Hole (Vagina)?</h4>
-      <label><input type="radio" name="q122" value="A"> Because of Pain</label><br>
-      <label><input type="radio" name="q122" value="B"> Because of Joy</label>
-
-    </div>
-
-      <div class="question" id="q13">
-      <h4>Boy puts Pennis into Girls which Hole?</h4>
-      <label><input type="radio" name="q13" value="A"> Front Hole (Vagina)</label><br>
-      <label><input type="radio" name="q13" value="B"> Back Hole (Ass)</label>
-
-    </div>
-
-      <div class="question" id="q14">
-      <h4>Girl has shaved Hair on Front Hole (Vagina) ?</h4>
-      <label><input type="radio" name="q14" value="A"> Shaved. Small Hair</label><br>
-      <label><input type="radio" name="q14" value="B"> Not Shaved. Medium Hair</label>
-
-    </div>
-
-
-        <div class="question" id="q15">
-      <h4>When Boy puts Pennis to Girls Front Hole doing Sex</h4>
-      <label><input type="radio" name="q15" value="A"> Boy has more joy & happy</label><br>
-      <label><input type="radio" name="q15" value="B"> Girl has more joy & happy</label><br>
-      <label><input type="radio" name="q15" value="C"> Both Girl & Boy more joy & happy</label>
-    </div>
-
-      <div class="question" id="q16">
-      <h4>Boy has shaved Hair on Pennis ?</h4>
-      <label><input type="radio" name="q16" value="A"> Shaved. Small Hair</label><br>
-      <label><input type="radio" name="q16" value="B"> Not Shaved. Medium Hair</label><br>
-     <label><input type="radio" name="q16" value="B"> No Hair</label>
-    </div>
-    
- <div class="question" id="q17">
-      <h4>Boy puts condom to Pennis doing Sex</h4>
-      <label><input type="radio" name="q17" value="A"> Yes. Condom used</label><br>
-      <label><input type="radio" name="q17" value="A"> No Condom not used</label>
-    </div>
-
- <div class="question" id="q18">
-      <h4>Boy is putting Pennis into Girls Front Hole very hard?</h4>
-      <label><input type="radio" name="q18" value="A"> Yes</label><br>
-      <label><input type="radio" name="q18" value="A"> No</label>
-    </div>
-
- <div class="question" id="q19">
-      <h4>Boy & Girl do Sex on?</h4>
-      <label><input type="radio" name="q19" value="A"> Table</label><br>
-      <label><input type="radio" name="q19" value="A"> Gym</label><br>
-     <label><input type="radio" name="q19" value="A"> Bedroom</label>
-
-    </div>
-
- <div class="question" id="q20">
-      <h4>Boys Pennis Size?</h4>
-      <label><input type="radio" name="q20" value="A"> Small</label><br>
-      <label><input type="radio" name="q20" value="A"> Medium</label><br>
-     <label><input type="radio" name="q20" value="A"> Long</label>
-    </div>
-
- <div class="question" id="q21">
-      <h4>Boy & Girl do sleep sex putting Pennis to Girls?</h4>
-      <label><input type="radio" name="q21" value="A"> Back Side</label><br>
-      <label><input type="radio" name="q21" value="A"> Front Side</label>
-    </div>
-
-
- <div class="question" id="q22">
-      <h4>Girl is opening Front Hole Vagina with her hand??</h4>
-      <label><input type="radio" name="q22" value="A"> Yes</label><br>
-      <label><input type="radio" name="q22" value="A"> No</label>
-    </div>
-
- <div class="question" id="q23">
-      <h4>White cream comming from??</h4>
-      <label><input type="radio" name="q23" value="A"> Boys Pennis</label><br>
-      <label><input type="radio" name="q23" value="A"> Girl Front Hole</label><br>
-     <label><input type="radio" name="q23" value="A"> No cream comming</label>
-
-    </div>
-    
-    <!-- Submit button -->
-    <button type="button" id="submitBtn">Submit</button>
-    <div id="loading">Checking your answers...</div>
+    <div id="questionsContainer"></div>
+    <button type="submit" class="submit-btn">Submit</button>
   </form>
 
-  <!-- Modal -->
-  <div id="resultModal">
-    <div class="modal-content">
-      ✅ All Answers are Correct!
-    </div>
+  <div id="modal" class="modal">
+    <div class="modal-content" id="modalContent"></div>
   </div>
-<script>
-  document.getElementById("submitBtn").addEventListener("click", () => {
-    const form = document.getElementById("quizForm");
-    const totalQuestions = 5; // Change to 20 when all added
-    let allAnswered = true;
 
-    for (let i = 1; i <= totalQuestions; i++) {
-      const selected = form.querySelector(`input[name="q${i}"]:checked`);
-      if (!selected) {
-        allAnswered = false;
-        break;
+  <script>
+    const questions = [
+
+   {
+        question: "What Dress Boy is wearing?",
+        options: ["T Shirt & Jeans Pant", "T Shirt & Jeans Short", "No Dress"]
+      },
+      {
+        question: "Girl is sitting on?",
+        options: ["Chair", "Bathroom", "Bedroom"]
+      },
+      {
+        question: "Girl is wearing?",
+        options: ["Bra", "Underwear Panty", "Socks",]
+      },
+      {
+        question: "Boy is Tasting Girls?",
+        options: ["Front Hole", "Back Hole"]
+      },
+      {
+        question: "Girl put mouth Gel to Front Hole?",
+        options: ["Yes", "No"]
+      },
+      {
+        question: "What is coming from Girls Front Hole?",
+        options: ["Mouth Gel", "White Cream", "Recess"]
+      },
+      {
+        question: "Boy is tasting Girls Front Hole?",
+        options: ["Slowly", "Hardly"]
+      },
+   {
+        question: "Girl takes Boys pennis to mouth?",
+        options: ["Yes Slowly", "Yes Hardly"]
+      },
+  {
+        question: "Girl Breast has nipples?",
+        options: ["Yes Black Nipple", "Yes White Nipple", "Small Black Nipple"]
+      },
+      {
+        question: "Boys Pennis size?",
+        options: ["Big", "Small"]
+      },
+
+      {
+        question: "Girl is putting Mouth Gel to Pennis?",
+        options: ["Yes", "No"]
+      },
+
+
+      {
+        question: "Who has Tatoo on body?",
+        options: ["Girl", "Boy", "Both", "Not Both"]
+      },
+
+    {
+        question: "Boys Pennis is in Mood?",
+        options: ["Pennis is up", "Pennis is down"]
+      },
+
+     {
+        question: "Boy has hair on Pennis?",
+        options: ["Shaved. Small Hair", "Not Shaved. Large Hair"]
+      },
+    {
+        question: "Girl takes Boys pennis to mouth? Who has more joy and happy?",
+        options: ["Girl has more joy", "Boy has more joy"]
+      },
+
+     {
+        question: "What is on Boys Pennis?",
+        options: ["Pennis Gel", "White cream", "Mouth Gel"]
+      },
+
+    {
+        question: "Girl breast size?",
+        options: ["Small", "Medium", "Big"]
+      },
+      {
+        question: "Boy is putting Pennis to Girl?",
+        options: ["Front Hole vagina", "Back Hole Ass"]
+      },
+
+
+      {
+        question: "Boy is putting Pennis to Girl? Who has more joy",
+        options: ["Girl has more joy", "Boy has more joy", "Both have more joy"]
+      },
+
+
+ {
+        question: "Boys Pennis is going into Front Hole?",
+        options: ["Full into Front Hole", "Half into Front Hole"]
+      },
+
+      {
+        question: "Now,What is coming from Girls Front Hole?",
+        options: ["Mouth Gel", "White Cream", "Recess"]
+      },
+   
+
+     {
+        question: "When doing sex, Girl uses condom inside Front Hole?",
+        options: ["Yes", "No"]
+      },
+
+
+      {
+        question: "Boys is sliding Pennis to Girls?",
+        options: ["Back Side Vagina", "Front Side Vagina"]
+      },
+
+   {
+        question: "Who is making more sound doing sex?",
+        options: ["Boy", "Girl", "Both Boy & Girl"]
+      },
+ 
+
+  
+ 
+      {
+        question: "Girl is on?",
+        options: ["Sitting on Boys Pennis", "Sleeping on Boys Pennis"]
+      },
+
+    
+ 
+      {
+        question: "Girl has Hair on Front Hole vagina?",
+        options: ["Yes shaved. Small hair.", "Not shaved large hair.", "No Hair"]
+      },
+
+
+
+
+
+      {
+        question: "Boy is rubbing Pennis to Front hole to come?",
+        options: ["Pennis Gel", "Pennis White cream", "Girl recess"]
+      },
+
+
+   
+
+     {
+        question: "Girl is taking Pennis to Front hole from?",
+        options: ["Back Side", "Front Side"]
+      },
+
+
+     {
+        question: "When doing sex, Boys Pennis Ball is touching Girls Front Hole?",
+        options: ["Yes", "No"]
+      },
+
+    {
+        question: "Girl is kissing Pennis balls?",
+        options: ["Slowly", "Very hardly"]
+      },
+
+
+    {
+        question: "What is the size of Boys Pennis balls?",
+        options: ["Small", "Medium", "Big"]
+      },
+
+     {
+        question: "Boy is putting Pennis to Front Hole?",
+        options: ["Slowly", "Very hardly"]
+      },
+
+     {
+        question: "Why recess comes from Girl front hole?",
+        options: ["Because of Pain", "Because of sex joy"]
+      },
+
+     {
+        question: "Boy is using condom?",
+        options: ["Yes", "No"]
+      },
+
+     {
+        question: "White cream coming?",
+        options: ["Yes", "No"]
+      },
+
+
+    ];
+
+    const container = document.getElementById('questionsContainer');
+
+    questions.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.className = 'question-card';
+
+      div.innerHTML = `<p>${q.question}</p>`;
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = 'options';
+
+      q.options.forEach((opt, i) => {
+        const optionId = `q${index}_opt${i}`;
+        optionsDiv.innerHTML += `
+          <label for="${optionId}">
+            <input type="radio" name="q${index}" id="${optionId}" value="${opt}">
+            ${opt}
+          </label><br>
+        `;
+      });
+
+      div.appendChild(optionsDiv);
+      container.appendChild(div);
+    });
+
+    const showModal = (message) => {
+      const modal = document.getElementById('modal');
+      const modalContent = document.getElementById('modalContent');
+      modalContent.innerHTML = message;
+      modal.classList.add('show');
+    };
+
+    const hideModal = () => {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('show');
+      setTimeout(() => { modal.style.display = 'none'; }, 500);
+    };
+
+    document.getElementById('quizForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      let allAnswered = true;
+      for (let i = 0; i < questions.length; i++) {
+        if (!document.querySelector(`input[name='q${i}']:checked`)) {
+          allAnswered = false;
+          break;
+        }
       }
-    }
 
-    if (!allAnswered) {
-      alert("Please answer all questions before submitting.");
-      return;
-    }
-
-    // Show loading animation
-    document.getElementById("loading").style.display = "block";
-
-    // Wait 3 seconds then show modal
-    setTimeout(() => {
-      document.getElementById("loading").style.display = "none";
-      document.getElementById("resultModal").style.display = "flex";
-
-      // Redirect after 2 more seconds
-      setTimeout(() => {
-        window.location.href = "AdVid2.html"; // Change to your target page
-      }, 2000);
-
-    }, 3000);
-  });
-</script>
+      if (!allAnswered) {
+        showModal("❗ Please attempt all questions before submitting.");
+        setTimeout(hideModal, 3000);
+      } else {
+        showModal("🕵️‍♂️ Checking Your Answers...");
+        setTimeout(() => {
+          showModal("✅ All the Answers are Correct! 🎉");
+          setTimeout(hideModal, 3000);
+        }, 5000);
+      }
+    });
+  </script>
 </body>
 </html>
