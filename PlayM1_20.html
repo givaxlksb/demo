@@ -86,7 +86,7 @@
   <script>
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
-    const duration = 522000 ; // 70 seconds
+    const duration = 900000 ; // 15 mins 
     const start = Date.now();
 
     function updateProgress() {
@@ -98,7 +98,7 @@
       if (percent < 100) {
         requestAnimationFrame(updateProgress);
       } else {
-        progressText.textContent = `Ad Playing Completed. ✅`;
+        progressText.textContent = `Ad(1) Completed. ✅`;
       }
     }
 
