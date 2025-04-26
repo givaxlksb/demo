@@ -1,161 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>10 Minute Rotated Progress</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f4f4f9;
-    }
-    .question-card {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    .question-card p {
-      font-size: 18px;
-      font-weight: bold;
-    }
-    .options {
-      margin-top: 10px;
-    }
-    .submit-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
-    .submit-btn:hover {
-      background-color: #45a049;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
+    html, body {
+      margin: 0;
+      padding: 0;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      transition: opacity 0.5s ease;
+      width: 100%;
+      background-color: black;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
     }
-    .modal.show {
+
+    iframe {
+      position: absolute;
+      transform: rotate(90deg) translateY(-50vh);
+      transform-origin: bottom left;
+      width: 98vh;
+      height: 97vw;
+      margin-top: -100vw;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    .progress-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 96vh;
+      height: 18px;
+      transform: rotate(90deg) translateY(-100vh);
+      transform-origin: top left;
+      background-color: rgba(255, 255, 255, 0.2);
+      z-index: 2;
       display: flex;
-      justify-content: center;
       align-items: center;
-      opacity: 1;
     }
-    .modal-content {
-      background-color: #fff;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 400px;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 18px;
-      animation: fadeIn 0.5s ease;
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: limegreen;
+      color: black;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: width 1s linear;
     }
-    @keyframes fadeIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0); /* Fully transparent */
+      z-index: 9999;
+      pointer-events: all;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h2>Video Ad (3) Questions</h2>
-  <form id="quizForm">
-    <div id="questionsContainer"></div>
-    <button type="submit" class="submit-btn">Submit</button>
-  </form>
 
-  <div id="modal" class="modal">
-    <div class="modal-content" id="modalContent"></div>
+  <!-- Rotated iframe -->
+  <iframe src="https://hi.xhamster43.desi/videos/nubile-films-ebbi-cums-on-a-stiff-cock-2885501"></iframe>
+
+  <!-- Rotated progress bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar">
+      <span id="progressText">Loading 0%. Do not close the page.</span>
+    </div>
   </div>
 
+  <!-- Overlay that disables interaction -->
+  <div class="overlay" id="blocker"></div>
+
   <script>
-    const questions = [
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const duration = 498000 ; // 8:30 mins 
+    const start = Date.now();
 
-      {
-        question: "Boy & Girl Kiss each other?",
-        options: ["Mouth Kissing", "Not Kissing"]
-      },
-      {
-        question: "What Dress Boy is wearing?",
-        options: ["Shirt & Pant", "T Shirt & Pant"]
-      },
-      
-    ];
+    function updateProgress() {
+      const elapsed = Date.now() - start;
+      const percent = Math.min((elapsed / duration) * 100, 100);
+      progressBar.style.width = percent + '%';
+      progressText.textContent = `${Math.floor(percent)}%.`;
 
-    const container = document.getElementById('questionsContainer');
-
-    questions.forEach((q, index) => {
-      const div = document.createElement('div');
-      div.className = 'question-card';
-
-      div.innerHTML = `<p>${q.question}</p>`;
-      const optionsDiv = document.createElement('div');
-      optionsDiv.className = 'options';
-
-      q.options.forEach((opt, i) => {
-        const optionId = `q${index}_opt${i}`;
-        optionsDiv.innerHTML += `
-          <label for="${optionId}">
-            <input type="radio" name="q${index}" id="${optionId}" value="${opt}">
-            ${opt}
-          </label><br>
-        `;
-      });
-
-      div.appendChild(optionsDiv);
-      container.appendChild(div);
-    });
-
-    const showModal = (message) => {
-      const modal = document.getElementById('modal');
-      const modalContent = document.getElementById('modalContent');
-      modalContent.innerHTML = message;
-      modal.classList.add('show');
-    };
-
-    const hideModal = () => {
-      const modal = document.getElementById('modal');
-      modal.classList.remove('show');
-      setTimeout(() => { modal.style.display = 'none'; }, 500);
-    };
-
-    document.getElementById('quizForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      let allAnswered = true;
-      for (let i = 0; i < questions.length; i++) {
-        if (!document.querySelector(`input[name='q${i}']:checked`)) {
-          allAnswered = false;
-          break;
-        }
-      }
-
-      if (!allAnswered) {
-        showModal("❗ Please attempt all questions before submitting.");
-        setTimeout(hideModal, 3000);
+      if (percent < 100) {
+        requestAnimationFrame(updateProgress);
       } else {
-        showModal("🕵️‍♂️ Checking Your Answers...");
-        setTimeout(() => {
-          showModal("✅ All the Answers are Correct! 🎉");
-          setTimeout(hideModal, 3000);
-        }, 5000);
+        progressText.textContent = `Ad(3) Completed. ✅`;
       }
-    });
+    }
+
+    updateProgress();
+
+    // Disable interaction after 15 seconds
+    setTimeout(() => {
+      document.getElementById('blocker').style.display = 'block';
+      const iframe = document.querySelector('iframe');
+      if (iframe) {
+        iframe.style.pointerEvents = 'none'; // Disable iframe clicks
+      }
+      console.log("Page is now unclickable.");
+    }, 15000);
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
