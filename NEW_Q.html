@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>30 Question Quiz</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .question { margin-bottom: 20px; }
+    .result { font-weight: bold; font-size: 18px; margin-top: 20px; }
+    .icon { margin-left: 10px; font-weight: bold; }
+    .correct { color: green; }
+    .wrong { color: red; }
+    .disabled { opacity: 0.6; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+  <form id="quizForm">
+    <div id="questionsContainer"></div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="checking" class="result" style="display: none;">Checking your answers...</div>
+  <div id="result" class="result" style="display: none;"></div>
+
+  <script>
+    const maxAttempts = 3;
+    let attemptsLeft = maxAttempts;
+
+    const questions = [
+      {
+        question: "What is the capital of France?",
+        options: ["Paris", "Berlin", "Madrid", "Rome"],
+        answer: "a"
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Mars", "Jupiter"],
+        answer: "b"
+      },
+      {
+        question: "What is the largest ocean?",
+        options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+        answer: "d"
+      }
+      // Add more questions up to 30...
+    ];
+
+    const container = document.getElementById('questionsContainer');
+
+    function renderQuestions(disableAll = false) {
+      container.innerHTML = "";
+      questions.forEach((q, index) => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.innerHTML = `<p><strong>Q${index + 1}:</strong> ${q.question}</p>`;
+
+        q.options.forEach((opt, optIndex) => {
+          const value = ['a', 'b', 'c', 'd'][optIndex];
+          const inputId = `q${index}_${value}`;
+          const checked = q.userAnswer === value ? 'checked' : '';
+          const disabled = disableAll || (q.answered && q.userAnswer !== q.answer) ? '' : 'disabled';
+
+          let icon = '';
+          if (typeof q.userAnswer !== 'undefined') {
+            if (value === q.userAnswer && value === q.answer) {
+              icon = `<span class="icon correct">✔️</span>`;
+            } else if (value === q.userAnswer && value !== q.answer) {
+              icon = `<span class="icon wrong">❌</span>`;
+            }
+          }
+
+          div.innerHTML += `
+            <label>
+              <input type="radio" name="q${index}" value="${value}" id="${inputId}" ${checked} ${disabled}>
+              ${opt}
+            </label>
+            ${icon}
+            <br>`;
+        });
+
+        container.appendChild(div);
+      });
+    }
+
+    renderQuestions();
+
+    document.getElementById('quizForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      document.getElementById('checking').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
+
+      setTimeout(() => {
+        document.getElementById('checking').style.display = 'none';
+
+        let wrongCount = 0;
+        questions.forEach((q, index) => {
+          const selected = document.querySelector(`input[name="q${index}"]:checked`);
+          const value = selected ? selected.value : null;
+          q.userAnswer = value;
+
+          if (value !== q.answer) {
+            wrongCount++;
+            q.answered = false; // wrong
+          } else {
+            q.answered = true; // correct
+          }
+        });
+
+        let resultText = '';
+        if (wrongCount === 0) {
+          resultText = '🎉 All the answers are correct!';
+          renderQuestions(true); // disable all
+        } else {
+          attemptsLeft--;
+          resultText = `${wrongCount} of the answers are wrong. You have ${attemptsLeft} chance${attemptsLeft !== 1 ? 's' : ''} left.`;
+
+          if (attemptsLeft <= 0) {
+            resultText += " ❌ You've used all your attempts.";
+            renderQuestions(true); // disable all
+            document.querySelector('button[type="submit"]').disabled = true;
+          } else {
+            renderQuestions(); // allow reattempt of incorrect only
+          }
+        }
+
+        document.getElementById('result').innerText = resultText;
+        document.getElementById('result').style.display = 'block';
+      }, 5000);
+    });
+  </script>
+
+</body>
+</html>
