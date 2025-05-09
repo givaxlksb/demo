@@ -27,6 +27,7 @@
     const maxAttempts = 3;
     let attemptsLeft = maxAttempts;
 
+    // 🔧 Add up to 30 questions here
     const questions = [
       {
         question: "What is the capital of France?",
@@ -42,8 +43,13 @@
         question: "What is the largest ocean?",
         options: ["Atlantic", "Indian", "Arctic", "Pacific"],
         answer: "d"
+      },
+      {
+        question: "Which language is used for web apps?",
+        options: ["Python", "Java", "JavaScript"],
+        answer: "c"
       }
-      // Add more questions up to 30...
+      // ➕ Add up to 30 questions similarly
     ];
 
     const container = document.getElementById('questionsContainer');
@@ -58,8 +64,11 @@
         q.options.forEach((opt, optIndex) => {
           const value = ['a', 'b', 'c', 'd'][optIndex];
           const inputId = `q${index}_${value}`;
-          const checked = q.userAnswer === value ? 'checked' : '';
-          const disabled = disableAll || (q.answered && q.userAnswer !== q.answer) ? '' : 'disabled';
+          const isSelected = q.userAnswer === value;
+          const checked = isSelected ? 'checked' : '';
+
+          // Disable if: quiz is over, or this question was answered correctly
+          const shouldDisable = (disableAll || q.answered === true) ? 'disabled' : '';
 
           let icon = '';
           if (typeof q.userAnswer !== 'undefined') {
@@ -72,7 +81,7 @@
 
           div.innerHTML += `
             <label>
-              <input type="radio" name="q${index}" value="${value}" id="${inputId}" ${checked} ${disabled}>
+              <input type="radio" name="q${index}" value="${value}" id="${inputId}" ${checked} ${shouldDisable}>
               ${opt}
             </label>
             ${icon}
@@ -95,6 +104,7 @@
         document.getElementById('checking').style.display = 'none';
 
         let wrongCount = 0;
+
         questions.forEach((q, index) => {
           const selected = document.querySelector(`input[name="q${index}"]:checked`);
           const value = selected ? selected.value : null;
@@ -102,9 +112,9 @@
 
           if (value !== q.answer) {
             wrongCount++;
-            q.answered = false; // wrong
+            q.answered = false;
           } else {
-            q.answered = true; // correct
+            q.answered = true;
           }
         });
 
@@ -118,10 +128,10 @@
 
           if (attemptsLeft <= 0) {
             resultText += " ❌ You've used all your attempts.";
-            renderQuestions(true); // disable all
+            renderQuestions(true);
             document.querySelector('button[type="submit"]').disabled = true;
           } else {
-            renderQuestions(); // allow reattempt of incorrect only
+            renderQuestions(); // allow retry for wrong ones
           }
         }
 
