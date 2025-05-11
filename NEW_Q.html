@@ -2,17 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>30 Question Quiz</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .question { margin-bottom: 20px; }
-    .result { font-weight: bold; font-size: 18px; margin-top: 20px; }
-    .icon { margin-left: 10px; font-weight: bold; }
-    .correct { color: green; }
-    .wrong { color: red; }
-    .disabled { opacity: 0.6; pointer-events: none; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .question-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .question-card p {
+      margin-top: 0;
+    }
+    .result {
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .icon {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+    .correct {
+      color: green;
+    }
+    .wrong {
+      color: red;
+    }
+    button[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button[type="submit"]:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -29,7 +63,6 @@
     const maxAttempts = 3;
     let attemptsLeft = maxAttempts;
 
-    // 🔧 Add up to 30 questions here
     const questions = [
       {
         question: "What is the capital of France?",
@@ -51,7 +84,7 @@
         options: ["Python", "Java", "JavaScript"],
         answer: "c"
       }
-      // ➕ Add up to 30 questions similarly
+      // ➕ Add more questions here
     ];
 
     const container = document.getElementById('questionsContainer');
@@ -60,7 +93,7 @@
       container.innerHTML = "";
       questions.forEach((q, index) => {
         const div = document.createElement('div');
-        div.className = 'question';
+        div.className = 'question-card';
         div.innerHTML = `<p><strong>Q${index + 1}:</strong> ${q.question}</p>`;
 
         q.options.forEach((opt, optIndex) => {
@@ -69,7 +102,6 @@
           const isSelected = q.userAnswer === value;
           const checked = isSelected ? 'checked' : '';
 
-          // Disable if: quiz is over, or this question was answered correctly
           const shouldDisable = (disableAll || q.answered === true) ? 'disabled' : '';
 
           let icon = '';
@@ -123,7 +155,7 @@
         let resultText = '';
         if (wrongCount === 0) {
           resultText = '🎉 All the answers are correct!';
-          renderQuestions(true); // disable all
+          renderQuestions(true);
         } else {
           attemptsLeft--;
           resultText = `${wrongCount} of the answers are wrong. You have ${attemptsLeft} chance${attemptsLeft !== 1 ? 's' : ''} left.`;
@@ -133,7 +165,7 @@
             renderQuestions(true);
             document.querySelector('button[type="submit"]').disabled = true;
           } else {
-            renderQuestions(); // allow retry for wrong ones
+            renderQuestions();
           }
         }
 
