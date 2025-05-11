@@ -2,309 +2,310 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Page</title>
+  <title>30 Question Quiz</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background-color: #f4f4f9;
+      background-color: #f4f4f4;
     }
     .question-card {
-      background: white;
+      background: #fff;
       border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      padding: 20px;
+      padding: 15px 20px;
       margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .question-card p {
+      margin-top: 0;
+    }
+    .result {
+      font-weight: bold;
       font-size: 18px;
+      margin-top: 20px;
+    }
+    .icon {
+      margin-left: 10px;
       font-weight: bold;
     }
-    .options {
-      margin-top: 10px;
+    .correct {
+      color: green;
     }
-    .submit-btn {
-      margin-top: 20px;
+    .wrong {
+      color: red;
+    }
+    button[type="submit"] {
       padding: 10px 20px;
       font-size: 16px;
       border: none;
-      border-radius: 5px;
-      background-color: #4CAF50;
+      background-color: #007BFF;
       color: white;
+      border-radius: 6px;
       cursor: pointer;
     }
-    .submit-btn:hover {
-      background-color: #45a049;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    .modal.show {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 1;
-    }
-    .modal-content {
-      background-color: #fff;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 400px;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 18px;
-      animation: fadeIn 0.5s ease;
-    }
-    @keyframes fadeIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    button[type="submit"]:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
-  <h2>Video Ad (1) Questions</h2>
-  <form id="quizForm">
+
+<h3> 1st - Video Ad Questions</h3>
+
+  <form id="quizForm"> 
     <div id="questionsContainer"></div>
-    <button type="submit" class="submit-btn">Submit</button>
+    <button type="submit">Submit</button>
   </form>
 
-  <div id="modal" class="modal">
-    <div class="modal-content" id="modalContent"></div>
-  </div>
+  <div id="checking" class="result" style="display: none;">Checking your answers...</div>
+  <div id="result" class="result" style="display: none;"></div>
 
   <script>
-    const questions = [
+    const maxAttempts = 3;
+    let attemptsLeft = maxAttempts;
 
+    const questions = [
+      {
+        question: "What colour of dress Girl is wearing?",
+        options: ["White and Pink", "White & Black"],
+        answer: "b"
+      },
+      {
+        question: "What dress Boy is wearing?",
+        options: ["White and Black", "Black & Black"],
+        answer: "b"
+      },
       {
         question: "Boy & Girl Kiss each other?",
-        options: ["Mouth Kissing", "Not Kissing"]
+        options: ["Mouth Kissing", "Not Kissing"],
+        answer: "a"
       },
       {
-        question: "What Dress Boy is wearing?",
-        options: ["Shirt & Pant", "T Shirt & Pant"]
+        question: "Boy is pressing Girls Breast?",
+        options: ["Yes Hardly", "Yes Slowly", "Not Pressing"],
+        answer: "b"
       },
-      {
-        question: "Girls Breast & Nipple is open from Dress?",
-        options: ["Yes", "No"]
-      },
-      {
-        question: "Boy is kissing Girls Nipple?",
-        options: ["Yes", "No"]
-      },
-      {
-        question: "Boy & Girl do sex on?",
-        options: ["Bathroom", "Bedroom", "Outdoor"]
-      },      
-      {
-        question: "What Dress Girl is wearing?",
-        options: ["Top & White+Pink Border Panty", "Slip & White+Pink Border Panty"]
-      },
-
       {
         question: "Girl Breast Nipples?",
-        options: ["Small White Nipple", "Small Red Nipple", "Small Black Nipple"]
+        options: ["Small White Nipple", "Small Brown Nipple", "Small Black Nipple"],
+        answer: "b"
       },
-        {
+      {
         question: "Boy is rubbing Girl's Front Hole?",
-        options: ["Yes", "No"]
+        options: ["Yes", "No"],
+        answer: "a"
       },
       {
         question: "Girl Breast Size?",
-        options: ["Small", "Medium", "Large"]
-      },
-      {
-        question: "Boy is kissing Girls Back Ass?",
-        options: ["Yes. Hardly.", "Yes. Slowly."]
-      },
-      {
-        question: "Which Type of Girls Panty?",
-        options: ["First Night Hot Panty", "Daily Use Panty", "Beach-wear Panty"]
-      },
-      {
-        question: "Before doing sex, Who removes Girls Panty?",
-        options: ["Panty Not Removed", "Girl Removes Her Panty", "Boy Removes Girls Panty"]
-      },
-      {
-        question: "Boy kisses & throws Girls Panty?",
-        options: ["Yes", "No"]
-      },
-      {
-        question: "When kissing Girl puts mouth gel to Boys mouth?",
-        options: ["Yes", "No"]
-      },
-      {
-        question: "Girl has how many buttons on her Front Hole?",
-        options: ["2 Buttons", "3 Buttons"]
+        options: ["Small", "Medium", "Large"],
+        answer: "b"
       },
       {
         question: "Boy taste Girls Front Hole?",
-        options: ["Yes, Hardly", "Yes, Slowly"]
+        options: ["Yes Hardly", "Yes Slowly"],
+        answer: "b"
       },
       {
         question: "Girls Front Hole & Skin is Open?",
-        options: ["Yes, Full Open", "Yes, Half Open"]
+        options: ["Yes, Full Open", "Yes, Half Open"],
+        answer: "a"
       },
       {
         question: "Boy is pulling Girls Front Hole skin with mouth?",
-        options: ["Yes", "No"]
+        options: ["Yes", "No"],
+        answer: "a"
       },
       {
-        question: "What is comming from Girls Front Hole?",
-        options: ["Mouth Gel", "White Cream", "Recess"]
+        question: "What is coming from Girls Front Hole?",
+        options: ["Gel", "White Cream", "Recess", "Not coming"],
+        answer: "d"
       },
       {
         question: "Boy is opening & putting finger to Girls which Hole?",
-        options: ["Back Hole", "Front Hole"]
+        options: ["Back Hole", "Front Hole"],
+        answer: "b"
       },
       {
         question: "Boy put finger to Girls Front Hole? Who is more joy/happy",
-        options: ["Boy is more joy & happy", "Girl is more joy & happy"]
+        options: ["Boy is more joy & happy", "Girl is more joy & happy"],
+        answer: "b"
       },
       {
         question: "Hair on Girls Front Hole",
-        options: ["Yes Shaved Small Hair", "No Hair", "Yes Shaved Medium Hair"]
-      },
-
-      {
-        question: "Boy slide his pennis to Girls which Hole?",
-        options: ["Front Hole", "Back Hole"]
+        options: ["Yes Shaved Small Hair", "No Hair", "Yes Shaved Medium Hair"],
+        answer: "b"
       },
       {
         question: "Boy put his pennis to Girls which Hole?",
-        options: ["Front Hole", "Back Hole"]
-      },
-      {
-        question: "Boy put pennis to Girls Front Hole? Who is more joy/happy",
-        options: ["Boy is more joy & happy", "Girl is more joy & happy", "Both Girl & Boy joy & happy"]
+        options: ["Front Hole", "Back Hole"],
+        answer: "a"
       },
       {
         question: "Boys Pennis Size",
-        options: ["Small", "Medium", "Large"]
+        options: ["Small", "Medium", "Large"],
+        answer: "c"
       },
       {
         question: "Boys is wearing underwear?",
-        options: ["Yes", "No"]
-      },
-      {
-        question: "Now, Boy put his finger to Girls which Hole?",
-        options: ["Front Hole", "Back Hole"]
+        options: ["Yes", "No"],
+        answer: "b"
       },
       {
         question: "Girl is rubbing Front Hole with her hand?",
-        options: ["Yes", "No"]
-      },
-      {
-        question: "Who is making more sound when boy puts pennis to front hole?",
-        options: ["Boy", "Girl", "Both Boy & Girl"]
+        options: ["Yes", "No"],
+        answer: "a"
       },
       {
         question: "Boy put condom to pennis?",
-        options: ["Yes", "No"]
+        options: ["Yes", "No"],
+        answer: "b"
       },
       {
         question: "Boy has Hair on pennis?",
-        options: ["Yes, Shaved Small Hair", "No Hair", "Not Shaved Long Hair"]
+        options: ["Yes, Shaved Small Hair", "No Hair", "Not Shaved Long Hair"],
+        answer: "b"
       },
       {
-        question: "Boy pennis puts into Front Hole? Half or Full",
-        options: ["Half Pennis to Front Hole", "Full Pennis to Front Hole"]
-      },
-     {
         question: "Girls Front Hole & Skin is",
-        options: ["Very Hard", "Very Smooth"]
+        options: ["Hard", "Smooth"],
+        answer: "b"
       },
-     {
-        question: "Boy is opening Girls Back Hole with finger?",
-        options: ["Yes", "No"]
+      {
+         question: "Girl do recess when Boy put pennis to Front hole?",
+        options: ["Yes", "No"],
+        answer: "b"
       },
-    {
-        question: "Boy is standing & put pennis to Girls?",
-        options: ["Mouth", "Front Hole", "Back Hole"]
+      {
+        question: "White cream comes from Pennis?",
+        options: ["Yes", "No"],
+        answer: "a"
       },
-    {
-        question: "Which type of sex Girl feels more joy & happy?",
-        options: ["Back Hole Sex", "Front Hole Sex"]
+      {
+        question: "Girl pulling Boys Pennis Ball?",
+        options: ["Yes Hardly", "Yes Slowly", "No"],
+        answer: "b"
       },
-    {
-        question: "Girl do recess when Boy put pennis to Front hole?",
-        options: ["Yes", "No"]
+      {
+        question: "General Question: What is the largest ocean?",
+        options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+        answer: "d"
       },
-  {
-        question: "White cream comes from?",
-        options: ["Boys Pennis", "Girls Front Hole", "No White cream"]
+      {
+        question: "General Question: What is the largest ocean?",
+        options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+        answer: "d"
       },
+      {
+        question: "General Question: What is the largest ocean?",
+        options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+        answer: "d"
+      },
+      {
+        question: "General Question: What is the largest ocean?",
+        options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+        answer: "d"
+      },
+      {
+        question: "General Question: What is the largest ocean?",
+        options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+        answer: "d"
+      },
+      {
+        question: "General Question: What is the largest ocean?",
+        options: ["Python", "Java", "JavaScript"],
+        answer: "c"
+      }
+      
     ];
 
     const container = document.getElementById('questionsContainer');
 
-    questions.forEach((q, index) => {
-      const div = document.createElement('div');
-      div.className = 'question-card';
+    function renderQuestions(disableAll = false) {
+      container.innerHTML = "";
+      questions.forEach((q, index) => {
+        const div = document.createElement('div');
+        div.className = 'question-card';
+        div.innerHTML = `<p><strong>Q${index + 1}:</strong> ${q.question}</p>`;
 
-      div.innerHTML = `<p>${q.question}</p>`;
-      const optionsDiv = document.createElement('div');
-      optionsDiv.className = 'options';
+        q.options.forEach((opt, optIndex) => {
+          const value = ['a', 'b', 'c', 'd'][optIndex];
+          const inputId = `q${index}_${value}`;
+          const isSelected = q.userAnswer === value;
+          const checked = isSelected ? 'checked' : '';
 
-      q.options.forEach((opt, i) => {
-        const optionId = `q${index}_opt${i}`;
-        optionsDiv.innerHTML += `
-          <label for="${optionId}">
-            <input type="radio" name="q${index}" id="${optionId}" value="${opt}">
-            ${opt}
-          </label><br>
-        `;
+          const shouldDisable = (disableAll || q.answered === true) ? 'disabled' : '';
+
+          let icon = '';
+          if (typeof q.userAnswer !== 'undefined') {
+            if (value === q.userAnswer && value === q.answer) {
+              icon = `<span class="icon correct">✔️</span>`;
+            } else if (value === q.userAnswer && value !== q.answer) {
+              icon = `<span class="icon wrong">❌</span>`;
+            }
+          }
+
+          div.innerHTML += `
+            <label>
+              <input type="radio" name="q${index}" value="${value}" id="${inputId}" ${checked} ${shouldDisable}>
+              ${opt}
+            </label>
+            ${icon}
+            <br>`;
+        });
+
+        container.appendChild(div);
       });
+    }
 
-      div.appendChild(optionsDiv);
-      container.appendChild(div);
-    });
+    renderQuestions();
 
-    const showModal = (message) => {
-      const modal = document.getElementById('modal');
-      const modalContent = document.getElementById('modalContent');
-      modalContent.innerHTML = message;
-      modal.classList.add('show');
-    };
-
-    const hideModal = () => {
-      const modal = document.getElementById('modal');
-      modal.classList.remove('show');
-      setTimeout(() => { modal.style.display = 'none'; }, 500);
-    };
-
-    document.getElementById('quizForm').addEventListener('submit', function(e) {
+    document.getElementById('quizForm').addEventListener('submit', function (e) {
       e.preventDefault();
 
-      let allAnswered = true;
-      for (let i = 0; i < questions.length; i++) {
-        if (!document.querySelector(`input[name='q${i}']:checked`)) {
-          allAnswered = false;
-          break;
-        }
-      }
+      document.getElementById('checking').style.display = 'block';
+      document.getElementById('result').style.display = 'none';
 
-      if (!allAnswered) {
-        showModal("❗ Please attempt all questions before submitting.");
-        setTimeout(hideModal, 3000);
-      } else {
-        showModal("🕵️‍♂️ Checking Your Answers...");
-        setTimeout(() => {
-          showModal("✅ All the Answers are Correct! 🎉");
-          setTimeout(hideModal, 3000);
-        }, 5000);
-      }
+      setTimeout(() => {
+        document.getElementById('checking').style.display = 'none';
+
+        let wrongCount = 0;
+
+        questions.forEach((q, index) => {
+          const selected = document.querySelector(`input[name="q${index}"]:checked`);
+          const value = selected ? selected.value : null;
+          q.userAnswer = value;
+
+          if (value !== q.answer) {
+            wrongCount++;
+            q.answered = false;
+          } else {
+            q.answered = true;
+          }
+        });
+
+        let resultText = '';
+        if (wrongCount === 0) {
+          resultText = '🎉 All the answers are correct!';
+          renderQuestions(true);
+        } else {
+          attemptsLeft--;
+          resultText = `${wrongCount} of the answers are wrong. You have ${attemptsLeft} chance${attemptsLeft !== 1 ? 's' : ''} left.`;
+
+          if (attemptsLeft <= 0) {
+            resultText += " ❌ You've used all your attempts.";
+            renderQuestions(true);
+            document.querySelector('button[type="submit"]').disabled = true;
+          } else {
+            renderQuestions();
+          }
+        }
+
+        document.getElementById('result').innerText = resultText;
+        document.getElementById('result').style.display = 'block';
+      }, 5000);
     });
   </script>
+
 </body>
 </html>
