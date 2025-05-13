@@ -2,40 +2,332 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loading Spinner</title>
+  <title>Question Cards with Overlay and Spinner</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #f9f9f9;
+    body {
       font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f2f2f2;
+      position: relative;
     }
 
+    .question-card {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      opacity: 0.5;
+      filter: blur(1.5px);
+    }
+
+    .question-card h4 {
+      margin-top: 0;
+    }
+
+    .options {
+      margin-top: 10px;
+    }
+
+    .options label {
+      display: block;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* 50% dark overlay */
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      backdrop-filter: blur(4px); /* extra blur */
+    }
+
+    /* Spinner */
     .spinner {
-      width: 60px;
-      height: 60px;
-      border: 6px solid #ccc;
-      border-top: 6px solid #007bff;
+      border: 6px solid rgba(255, 255, 255, 0.3);
+      border-top: 6px solid #ffffff;
       border-radius: 50%;
+      width: 50px;
+      height: 50px;
       animation: spin 1s linear infinite;
+      margin-bottom: 20px;
     }
 
     @keyframes spin {
-      0%   { transform: rotate(0deg); }
+      0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <br>
-    <b><center>Questions are Loading... <br>Watching Video Ads Not completed...</center></b>
-<br>
 
-  <div class="spinner"></div>
+  <!-- Overlay with spinner -->
+  <div class="overlay">
+    <div class="spinner"></div>
+    <font color="black">Watching Video Ads Not Completed  </font></div>
+
+  <h2>Video Ad Questions</h2>
+
+  <div class="question-card">
+    <h4>1. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>2. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>3. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>1. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>2. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>3. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>1. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>2. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>3. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>1. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>2. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>3. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>1. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>2. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>3. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>1. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>2. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>3. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>1. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>2. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>3. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
+
+
+  <div class="question-card">
+    <h4>1. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>2. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>3. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
+
+
+  <div class="question-card">
+    <h4>28. What is the capital of France?</h4>
+    <div class="options">
+      <label><input type="radio" name="q1"> Berlin</label>
+      <label><input type="radio" name="q1"> Madrid</label>
+      <label><input type="radio" name="q1"> Paris</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>29. Which planet is known as the Red Planet?</h4>
+    <div class="options">
+      <label><input type="radio" name="q2"> Venus</label>
+      <label><input type="radio" name="q2"> Mars</label>
+      <label><input type="radio" name="q2"> Jupiter</label>
+    </div>
+  </div>
+
+  <div class="question-card">
+    <h4>30. Who wrote the play 'Romeo and Juliet'?</h4>
+    <div class="options">
+      <label><input type="radio" name="q3"> Charles Dickens</label>
+      <label><input type="radio" name="q3"> William Shakespeare</label>
+      <label><input type="radio" name="q3"> Leo Tolstoy</label>
+    </div>
+  </div>
 
 </body>
 </html>
