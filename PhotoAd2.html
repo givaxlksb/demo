@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Answer Checker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f2f5;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .message {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+    .correct {
+      color: green;
+    }
+    .wrong {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+<h3> ಫೋಟೋ ಜಾಹೀರಾತು-2</h3>
+
+
+  <iframe height="500" width="380" src="https://hdpornpics.xxx/hardcore-sex-pictures/"></iframe>
+
+  <h3><center>ಎರೆಡನೇ ಫೋಟೋ ಕ್ಲಿಕ್ ಮಾಡಿ ಹಾಗು ಎಲ್ಲಾ ಫೋಟೋಗಳನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ ವೀಕ್ಷಿಸಿ:</center> </h3>
+
+
+  
+  <div class="container">
+    <h4><font color="red">ಹುಡುಗಿಯು ಹುಡುಗನ ತುಣ್ಣಿಯನ್ನು ತನ್ನ ಬಾಯಿಂದ ನೆಕ್ಕಿ ಸೀಬುತ್ತಿದ್ದಾಳೆ</font></h4>
+    <h4>ಇಂಗ್ಲೀಷನಲ್ಲಿ ಕೆಳಗೆ  ಟೈಪ್ ಮಾಡಿ:</h4>
+    <input type="text" id="userInput" placeholder="" />
+    <button onclick="checkAnswer()">Submit</button>
+    <div class="message" id="resultMessage"></div>
+  </div>
+
+  <script>
+    // Define the correct answer here
+    const correctAnswer = "When boy and girl do sex white cream is coming from boy pennis";
+
+    function checkAnswer() {
+      const input = document.getElementById("userInput").value.trim();
+      const messageDiv = document.getElementById("resultMessage");
+
+      // Show checking message
+      messageDiv.innerHTML = "🔄 ಉತ್ತರ ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...";
+      messageDiv.className = "message";
+
+      setTimeout(() => {
+        if (input.toLowerCase() === correctAnswer.toLowerCase()) {
+          messageDiv.innerHTML = "✅ ಉತ್ತರ ಸರಿಯಾಗಿವೆ!";
+          messageDiv.className = "message correct";
+        } else {
+          messageDiv.innerHTML = "❌ ಉತ್ತರ ತಪ್ಪಾಗಿವೆ.";
+          messageDiv.className = "message wrong";
+        }
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
