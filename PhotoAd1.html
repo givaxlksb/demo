@@ -1,33 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>30 Question Quiz</title>
+  <title>Answer Checker</title>
   <style>
     body {
       font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f2f5;
+    }
+    .container {
+      background: white;
       padding: 20px;
-      background-color: #f4f4f4;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
     }
-    .question-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 15px 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
     }
-    .question-card p {
-      margin-top: 0;
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    .result {
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 20px;
+    button:hover {
+      background-color: #0056b3;
     }
-    .icon {
-      margin-left: 10px;
-      font-weight: bold;
+    .message {
+      margin-top: 15px;
+      font-size: 16px;
     }
     .correct {
       color: green;
@@ -35,286 +55,46 @@
     .wrong {
       color: red;
     }
-    button[type="submit"] {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      background-color: #007BFF;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button[type="submit"]:disabled {
-      background-color: #aaa;
-      cursor: not-allowed;
-    }
   </style>
 </head>
 <body>
-
 <h3> ಫೋಟೋ ಜಾಹೀರಾತು-1</h3>
 
 
   <iframe height="500" width="380" src="https://hdpornpics.xxx/hardcore-sex-pictures/"></iframe>
 
-
-
+<h4>ಮೂರನೇ ಫೋಟೋ ಕ್ಲಿಕ್ ಮಾಡಿ ಹಾಗು ಎಲ್ಲಾ ಫೋಟೋಗಳನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ ವೀಕ್ಷಿಸಿ:</h4>
 
   
-  <form id="quizForm"> 
-    <div id="questionsContainer"></div>
-    <button type="submit">Submit</button>
-  </form>
-
-  <div id="checking" class="result" style="display: none;">ಉತ್ತರಗಳನ್ನು ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...</div>
-  <div id="result" class="result" style="display: none;"></div>
+  <div class="container">
+    <h4>Please enter your answer:</h4>
+    <input type="text" id="userInput" placeholder="Type your answer here" />
+    <button onclick="checkAnswer()">Submit</button>
+    <div class="message" id="resultMessage"></div>
+  </div>
 
   <script>
-    const maxAttempts = 3;
-    let attemptsLeft = maxAttempts;
+    // Define the correct answer here
+    const correctAnswer = "Sandeep Is A Good";
 
-    const questions = [
-            {
-        question: "ಹುಡುಗ ಹಾಗು ಹುಡುಗಿ ಸೆಕ್ಸ್ ಮಾಡುವಾಗ ಯಾರು ಕೂಗುತ್ತಿದ್ದಾರೆ?",
-        options: ["ಹುಡುಗ", "ಹುಡುಗಿ", "ಹುಡುಗ ಹಾಗು ಹುಡುಗಿ", "ಯಾರು ಅಲ್ಲ"],
-        answer: "c"
-      },
-      {
-        question: "ಹುಡುಗಿ ಯಾವ ಬಣ್ಣದ ಬಟ್ಟೆಯನ್ನು ಹಾಕಿದ್ದಾಳೆ?",
-        options: ["ನೀಲಿ + ಗುಲಾಬಿ ಲಾಂಗ್ ಸ್ಲಿಪ್ ಮತ್ತು ಜೀನ್ಸ್ ಚಡ್ಡಿ", "ಬಿಳಿ + ಗುಲಾಬಿ ಲಾಂಗ್ ಸ್ಲಿಪ್ ಮತ್ತು ಜೀನ್ಸ್ ಚಡ್ಡಿ"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗ ಯಾವ ಬಣ್ಣದ ಬಟ್ಟೆಯನ್ನು ಹಾಕಿದ್ದಾನೆ?",
-        options: ["ಕಪ್ಪು + ನೀಲಿ ಟಿ ಶರ್ಟ್ ಮತ್ತು ಹಳದಿ ಪ್ಯಾಂಟ್ ", "ಕಪ್ಪು + ಬೂದು ಟಿ ಶರ್ಟ್ ಮತ್ತು ಹಳದಿ ಪ್ಯಾಂಟ್ "],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗ ಮತ್ತು ಹುಡುಗಿ ಬಾಯಿಂದ ಬಾಯಿಗೆ ಕಿಸ್ ಮಾಡುತ್ತಿದ್ದಾರೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗ ಹುಡುಗಿಯ ನಿಕ್ಕರ್/ಒಳಉಡುಪನ್ನು ಕಳಚುತ್ತಿದ್ದಾನೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗ ಹುಡುಗಿಯ ಮೊಲೆಯನ್ನು ಅಡಚುತ್ತಿದ್ದಾನೆ?",
-        options: ["ಹೌದು, ನಿಧಾನವಾಗಿ ", "ಹೌದು, ಗಟ್ಟಿಯಾಗಿ", "ಅಲ್ಲ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗಿ ಹುಡುಗನ ನಿಕ್ಕರ್/ಒಳಉಡುಪನ್ನು ಕಳಚುತ್ತಿದ್ದಾಳೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗಿಯ ಮೊಲೆಯ ಚೊಟ್ಟಿನ ಬಣ್ಣ?",
-        options: ["ಬಿಳಿ", "ಕಂದು/ಕೋಫಿ", "ಕೆಂಪು"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗ ಹುಡುಗಿಯ ತುಲ್ಲನ್ನು ತನ್ನ ಕೈಯಿಂದ ತಿಕ್ಕುತ್ತಿದ್ದಾನೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗಿಯ ಮೊಲೆಯ ಗಾತ್ರ ?",
-        options: ["ಸಣ್ಣ ಗಾತ್ರ", "ಸಾಮಾನ್ಯ ಗಾತ್ರ", "ದೊಡ್ಡ ಗಾತ್ರ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗ ಹುಡುಗಿಯ ತುಲ್ಲನ್ನು ನೆಕ್ಕುತ್ತಿದ್ದಾನೆ?",
-        options: ["ಹೌದು, ನಿಧಾನವಾಗಿ ", "ಹೌದು, ಗಟ್ಟಿಯಾಗಿ", "ಅಲ್ಲ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗಿಯ ತುಲ್ಲು ಹಾಗು ತುಲ್ಲಿನ ಚರ್ಮ ತೆರೆದಿದೆಯೇ?",
-        options: ["ಹೌದು, ಪೂರ್ತಿ ತೆರೆದಿದೆ", "ಹೌದು, ಅರ್ಧ ತೆರೆದಿದೆ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗ ಹುಡುಗಿಯ ತುಲ್ಲಿನ ಚರ್ಮವನ್ನು ಬಾಯಿಂದ ಕಚ್ಚಿ ಎಳೆಯುತ್ತಿದ್ದಾನೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "b"
-      },
+    function checkAnswer() {
+      const input = document.getElementById("userInput").value.trim();
+      const messageDiv = document.getElementById("resultMessage");
 
-      {
-        question: "ಹುಡುಗ ತನ್ನ ಬೆರಳನ್ನು ಹುಡುಗಿಯ ಯಾವ ದೇಹದ ಭಾಗಕ್ಕೆ ಹಾಕಿ ಒತ್ತುತ್ತಿದ್ದಾನೆ?",
-        options: ["ಮುಕಳಿಯ ಒಳಗೆ", "ತುಲ್ಲಿನ ಒಳಗೆ", "ಮುಕಳಿ ಹಾಗು ತುಲ್ಲಿನ ಒಳಗೆ", "ಬೆರಳನ್ನು ಹಾಕುತ್ತಿಲ್ಲ"],
-        answer: "c"
-      },
-     {
-        question: "ಹುಡುಗಿ ಹುಡುಗನ ತುಣ್ಣಿಗೆ ತನ್ನ ಬಾಯಿಯ ಎಂಜಲನ್ನು ಹಾಕುತ್ತಿದ್ದಾಳೆ ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗಿಯ ತುಲ್ಲಿನ ಮೇಲಿನ ಕೂದಲು?",
-        options: ["ಸಣ್ಣ ಕೂದಲು", "ಕೂದಲು ಇಲ್ಲ", "ಸಾಮಾನ್ಯ ಕೂದಲು"],
-        answer: "c"
-      },
-      {
-        question: "ಹುಡುಗ ತನ್ನ ತುಣ್ಣಿಯನ್ನು ಹುಡುಗಿಯ ಯಾವ ದೇಹದ ಭಾಗಕ್ಕೆ ಹಾಕಿ ಒತ್ತುತ್ತಿದ್ದಾನೆ?",
-        options: ["ಮುಕಳಿಯ ಒಳಗೆ", "ತುಲ್ಲಿನ ಒಳಗೆ", "ಮುಕಳಿ ಹಾಗು ತುಲ್ಲಿನ ಒಳಗೆ"],
-        answer: "c"
-      },
-      {
-        question: "ಹುಡುಗನ ತುಣ್ಣಿಯ ಗಾತ್ರ?",
-        options: ["ಸಣ್ಣ ಗಾತ್ರ", "ಸಾಮಾನ್ಯ ಗಾತ್ರ", "ದೊಡ್ಡ ಗಾತ್ರ"],
-        answer: "b"
-      },
-     {
-        question: "ಹುಡುಗಿಯು ಹುಡುಗನ ತುಣ್ಣಿಯನ್ನು ತನ್ನ ಬಾಯಿಂದ ನೆಕ್ಕಿ ಸೀಬುತ್ತಿದ್ದಾಳೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗ ನಿಕ್ಕರ್/ಒಳಉಡುಪನ್ನು ಹಾಕಿದ್ದಾನೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "b"
-      },
-     {
-        question: "ಹುಡುಗ ತನ್ನ ಬಾಯಿಯ ಎಂಜಲನ್ನು ಹುಡುಗಿಗೆ ಎಲ್ಲಿ ಹಾಕುತ್ತಿದ್ದಾನೆ?",
-        options: ["ಮುಕಳಿಯ ಒಳಗೆ", "ತುಲ್ಲಿನ ಒಳಗೆ", "ಹುಡುಗಿಯ ಬಾಯಿಗೆ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗಿಯು ಕೈಯಿಂದ ತನ್ನ ತುಲ್ಲನ್ನು ತಿಕ್ಕುತ್ತಿದ್ದಾಳೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗನ ತುಣ್ಣಿಗೆ ಕಾಂಡೊಮ್ ಹಾಕಲಾಗಿದೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗನ ತುಣ್ಣಿಯ ಮೇಲಿನ ಕೂದಲು?",
-        options: ["ಸಣ್ಣ ಕೂದಲು", "ಕೂದಲು ಇಲ್ಲ", "ಸಾಮಾನ್ಯ ಕೂದಲು"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗ ಹಾಗು ಹುಡುಗಿ ಸೆಕ್ಸ್ ಮಾಡುವಾಗ ಹುಡುಗನ ತುಣ್ಣಿಯ ಸ್ಥಿತಿ?",
-        options: ["ತುಣ್ಣಿ ನೆಟ್ಟಗಿದೆ", "ತುಣ್ಣಿ ನೆಟ್ಟಗಿದೆ ಹಾಗು ಡೊಂಕಾಗಿದೆ", "ತುಣ್ಣಿ ನೆಟ್ಟಗಿಲ್ಲ"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗಿಯು ತನ್ನ ತುಲ್ಲಿಗೆ ರಿಂಗ್/ಬಟನ್ ಹಾಕಿಕೊಂಡಿದ್ದಾಳೆ ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "b"
-      },
-      {
-         question: "ಹುಡುಗ ತನ್ನ ತುಣ್ಣಿಯನ್ನು ಹುಡುಗಿಯ ತುಲ್ಲಿಗೆ ಹಾಕುವಾಗ ಹುಡುಗಿಯು ಉಚ್ಚೆ/ಮೂತ್ರ ಮಾಡಿಕೊಂಡಿದ್ದಾಳೆ ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "b"
-      },
-      {
-        question: "ಹುಡುಗ ಹಾಗು ಹುಡುಗಿ ಸೆಕ್ಸ್ ಮಾಡುವಾಗ ಹುಡುಗನ ತುಣ್ಣಿಯಿಂದ ಬಿಳಿಯ ರಸ ಹೊರಬರುತ್ತಿದೆ?",
-        options: ["ಹೌದು ", "ಅಲ್ಲ"],
-        answer: "a"
-      },
-      {
-        question: "ಹುಡುಗ ಹಾಗು ಹುಡುಗಿ ಸೆಕ್ಸ್ ಮಾಡುವಾಗ ಹುಡುಗಿಯ ತುಲ್ಲಿನಿಂದ ಎನು ಹೊರಬರುತ್ತಿದೆ?",
-        options: ["ಹುಡುಗನ ತುಣ್ಣಿಯ ರಸ", "ಹುಡುಗನ ತುಣ್ಣಿಯ ಬಿಳಿಯ ರಸ", "ಹುಡುಗನ ಉಚ್ಚೆ/ಮೂತ್ರ", "ಏನು ಬರುತ್ತಿಲ್ಲ"],
-        answer: "d"
-      },
-      {
-        question: "ಹುಡುಗಿಯು ಹುಡುಗನ ತುಣ್ಣಿಯ ಬಾಲ್ಸ್ /ಬೂರನ್ನು ಎಳೆಯುತ್ತಿದ್ದಾಳೆ?",
-        options: ["ಹೌದು, ನಿಧಾನವಾಗಿ ", "ಹೌದು, ಗಟ್ಟಿಯಾಗಿ", "ಅಲ್ಲ"],
-        answer: "a"
-      }
-      
-    ];
-
-    const container = document.getElementById('questionsContainer');
-
-    function renderQuestions(disableAll = false) {
-      container.innerHTML = "";
-      questions.forEach((q, index) => {
-        const div = document.createElement('div');
-        div.className = 'question-card';
-        div.innerHTML = `<p><strong>Q${index + 1}:</strong> ${q.question}</p>`;
-
-        q.options.forEach((opt, optIndex) => {
-          const value = ['a', 'b', 'c', 'd'][optIndex];
-          const inputId = `q${index}_${value}`;
-          const isSelected = q.userAnswer === value;
-          const checked = isSelected ? 'checked' : '';
-
-          const shouldDisable = (disableAll || q.answered === true) ? 'disabled' : '';
-
-          let icon = '';
-          if (typeof q.userAnswer !== 'undefined') {
-            if (value === q.userAnswer && value === q.answer) {
-              icon = `<span class="icon correct">✔️</span>`;
-            } else if (value === q.userAnswer && value !== q.answer) {
-              icon = `<span class="icon wrong">❌</span>`;
-            }
-          }
-
-          div.innerHTML += `
-            <label>
-              <input type="radio" name="q${index}" value="${value}" id="${inputId}" ${checked} ${shouldDisable}>
-              ${opt}
-            </label>
-            ${icon}
-            <br>`;
-        });
-
-        container.appendChild(div);
-      });
-    }
-
-    renderQuestions();
-
-    document.getElementById('quizForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      document.getElementById('checking').style.display = 'block';
-      document.getElementById('result').style.display = 'none';
+      // Show checking message
+      messageDiv.innerHTML = "🔄 Your answer is being checked...";
+      messageDiv.className = "message";
 
       setTimeout(() => {
-        document.getElementById('checking').style.display = 'none';
-
-        let wrongCount = 0;
-
-        questions.forEach((q, index) => {
-          const selected = document.querySelector(`input[name="q${index}"]:checked`);
-          const value = selected ? selected.value : null;
-          q.userAnswer = value;
-
-          if (value !== q.answer) {
-            wrongCount++;
-            q.answered = false;
-          } else {
-            q.answered = true;
-          }
-        });
-
-        let resultText = '';
-        if (wrongCount === 0) {
-          resultText = '🎉 ಎಲ್ಲಾ ಉತ್ತರಗಳು ಸರಿಯಾಗಿವೆ!';
-          renderQuestions(true);
+        if (input.toLowerCase() === correctAnswer.toLowerCase()) {
+          messageDiv.innerHTML = "✅ Your answer is correct!";
+          messageDiv.className = "message correct";
         } else {
-          attemptsLeft--;
-          resultText = `${wrongCount} ಉತ್ತರಗಳು ತಪ್ಪಾಗಿವೆ. ಈಗ ಕೇವಲ ${attemptsLeft} ಪ್ರಯತ್ನಗಳು${attemptsLeft !== 1 ? 's' : ''} ಉಳಿದಿವೆ.`;
-
-          if (attemptsLeft <= 0) {
-            resultText += " ❌ ನೀವು ನಿಮ್ಮ ಎಲ್ಲಾ ಪ್ರಯತ್ನಗಳನ್ನು ಬಳಸಿದ್ದೀರಿ.";
-            renderQuestions(true);
-            document.querySelector('button[type="submit"]').disabled = true;
-          } else {
-            renderQuestions();
-          }
+          messageDiv.innerHTML = "❌ Your answer is wrong.";
+          messageDiv.className = "message wrong";
         }
-
-        document.getElementById('result').innerText = resultText;
-        document.getElementById('result').style.display = 'block';
       }, 5000);
-    });
+    }
   </script>
-
 </body>
 </html>
