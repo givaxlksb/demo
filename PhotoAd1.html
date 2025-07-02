@@ -67,36 +67,5 @@
 
 
   
-  <div class="container">
-    <h4><font color="red">ಹುಡುಗ ತನ್ನ ತುಣ್ಣಿಯನ್ನು ಹುಡುಗಿಯ ತುಲ್ಲಿಗೆ ಹಾಕುವಾಗ ಹುಡುಗಿಯು ಉಚ್ಚೆ/ಮೂತ್ರ ಮಾಡಿಕೊಂಡಿದ್ದಾಳೆ</font></h4>
-    <h4>ಇಂಗ್ಲೀಷನಲ್ಲಿ ಕೆಳಗೆ  ಟೈಪ್ ಮಾಡಿ:</h4>
-    <input type="text" id="userInput" placeholder="" />
-    <button onclick="checkAnswer()">Submit</button>
-    <div class="message" id="resultMessage"></div>
-  </div>
-
-  <script>
-    // Define the correct answer here
-    const correctAnswer = "When boy put his pennis to girl vagina girl do recess";
-
-    function checkAnswer() {
-      const input = document.getElementById("userInput").value.trim();
-      const messageDiv = document.getElementById("resultMessage");
-
-      // Show checking message
-      messageDiv.innerHTML = "🔄 ಉತ್ತರ ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...";
-      messageDiv.className = "message";
-
-      setTimeout(() => {
-        if (input.toLowerCase() === correctAnswer.toLowerCase()) {
-          messageDiv.innerHTML = "✅ ಉತ್ತರ ಸರಿಯಾಗಿವೆ!";
-          messageDiv.className = "message correct";
-        } else {
-          messageDiv.innerHTML = "❌ ಉತ್ತರ ತಪ್ಪಾಗಿವೆ.";
-          messageDiv.className = "message wrong";
-        }
-      }, 5000);
-    }
-  </script>
 </body>
 </html>
