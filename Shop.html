@@ -65,6 +65,21 @@
     #fileInput {
       display: none;
     }
+    .action-btn {
+      margin: 0 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .edit-btn {
+      background-color: #ffc107;
+      border: none;
+      color: white;
+    }
+    .delete-btn {
+      background-color: #dc3545;
+      border: none;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -75,23 +90,23 @@
     <thead>
       <tr>
         <th onclick="sortTable(0, this)">Product Name <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
-        <th onclick="sortTable(1, this)">Rate Per Unit <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
-        <th onclick="sortTable(2, this)">Item Type <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
-        <th onclick="sortTable(3, this)">Buy Price <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
-        <th onclick="sortTable(4, this)">Sell Price <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th onclick="sortTable(1, this)">Item Type <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th onclick="sortTable(2, this)">Buy Price <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th onclick="sortTable(3, this)">Sell Price <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th onclick="sortTable(4, this)">Margin <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody id="productBody"></tbody>
   </table>
 
   <div id="formContainer">
-    <h2>Add New Product</h2>
+    <h2 id="formTitle">Add New Product</h2>
     <input type="text" id="productName" placeholder="Product Name" />
-    <input type="text" id="ratePerUnit" placeholder="Rate Per Unit" />
     <input type="text" id="itemType" placeholder="Item Type" />
     <input type="number" id="buyPrice" placeholder="Buy Price" />
     <input type="number" id="sellPrice" placeholder="Sell Price" />
-    <button onclick="addProduct()">Add Product</button>
+    <button onclick="submitProduct()" id="submitButton">Add Product</button>
   </div>
 
   <div id="importExport">
@@ -104,35 +119,76 @@
     let products = [];
     let currentSortColumn = null;
     let currentSortDir = "asc";
+    let editIndex = -1;
 
     function renderTable() {
       const tbody = document.getElementById("productBody");
       tbody.innerHTML = "";
-      products.forEach(product => {
+      products.forEach((product, index) => {
+        const margin = product.sellPrice - product.buyPrice;
         const row = `<tr>
           <td>${product.productName}</td>
-          <td>${product.ratePerUnit}</td>
           <td>${product.itemType}</td>
           <td>${product.buyPrice}</td>
           <td>${product.sellPrice}</td>
+          <td>${margin}</td>
+          <td>
+            <button class="action-btn edit-btn" onclick="editProduct(${index})">Edit</button>
+            <button class="action-btn delete-btn" onclick="deleteProduct(${index})">Delete</button>
+          </td>
         </tr>`;
         tbody.innerHTML += row;
       });
     }
 
-    function addProduct() {
+    function submitProduct() {
       const productName = document.getElementById("productName").value;
-      const ratePerUnit = document.getElementById("ratePerUnit").value;
       const itemType = document.getElementById("itemType").value;
       const buyPrice = parseFloat(document.getElementById("buyPrice").value);
       const sellPrice = parseFloat(document.getElementById("sellPrice").value);
 
-      if (productName && ratePerUnit && itemType && !isNaN(buyPrice) && !isNaN(sellPrice)) {
-        const product = { productName, ratePerUnit, itemType, buyPrice, sellPrice };
-        products.push(product);
+      if (productName && itemType && !isNaN(buyPrice) && !isNaN(sellPrice)) {
+        const product = { productName, itemType, buyPrice, sellPrice };
+
+        if (editIndex >= 0) {
+          products[editIndex] = product;
+          editIndex = -1;
+          document.getElementById("submitButton").innerText = "Add Product";
+          document.getElementById("formTitle").innerText = "Add New Product";
+        } else {
+          products.push(product);
+        }
+
+        localStorage.setItem("products", JSON.stringify(products));
+        clearForm();
+        renderTable();
+      }
+    }
+
+    function editProduct(index) {
+      const product = products[index];
+      document.getElementById("productName").value = product.productName;
+      document.getElementById("itemType").value = product.itemType;
+      document.getElementById("buyPrice").value = product.buyPrice;
+      document.getElementById("sellPrice").value = product.sellPrice;
+      document.getElementById("submitButton").innerText = "Update Product";
+      document.getElementById("formTitle").innerText = "Edit Product";
+      editIndex = index;
+    }
+
+    function deleteProduct(index) {
+      if (confirm("Are you sure you want to delete this product?")) {
+        products.splice(index, 1);
         localStorage.setItem("products", JSON.stringify(products));
         renderTable();
       }
+    }
+
+    function clearForm() {
+      document.getElementById("productName").value = "";
+      document.getElementById("itemType").value = "";
+      document.getElementById("buyPrice").value = "";
+      document.getElementById("sellPrice").value = "";
     }
 
     function searchProduct() {
@@ -157,12 +213,12 @@
       currentSortColumn = colIndex;
       thElement.classList.add(currentSortDir === "asc" ? "sorted-asc" : "sorted-desc");
 
-      const keyMap = ["productName", "ratePerUnit", "itemType", "buyPrice", "sellPrice"];
+      const keyMap = ["productName", "itemType", "buyPrice", "sellPrice", "margin"];
       const key = keyMap[colIndex];
 
       products.sort((a, b) => {
-        let valA = a[key];
-        let valB = b[key];
+        let valA = key === "margin" ? a.sellPrice - a.buyPrice : a[key];
+        let valB = key === "margin" ? b.sellPrice - b.buyPrice : b[key];
 
         if (typeof valA === "number" && typeof valB === "number") {
           return currentSortDir === "asc" ? valA - valB : valB - valA;
@@ -207,16 +263,8 @@
         products = JSON.parse(stored);
       } else {
         products = [
-          { productName: "Apple", ratePerUnit: "1 kg", itemType: "Fruit", buyPrice: 50, sellPrice: 70 },
-          { productName: "Rice", ratePerUnit: "1 kg", itemType: "Grain", buyPrice: 40, sellPrice: 55 },
-          { productName: "Shampoo", ratePerUnit: "500 ml", itemType: "Toiletry", buyPrice: 120, sellPrice: 160 },
-          { productName: "Bread", ratePerUnit: "1 pack", itemType: "Bakery", buyPrice: 25, sellPrice: 35 },
-          { productName: "Milk", ratePerUnit: "1 litre", itemType: "Dairy", buyPrice: 30, sellPrice: 45 },
-          { productName: "Eggs", ratePerUnit: "12 pcs", itemType: "Poultry", buyPrice: 60, sellPrice: 80 },
-          { productName: "Tomato", ratePerUnit: "1 kg", itemType: "Vegetable", buyPrice: 20, sellPrice: 30 },
-          { productName: "Soap", ratePerUnit: "100 g", itemType: "Toiletry", buyPrice: 10, sellPrice: 15 },
-          { productName: "Notebook", ratePerUnit: "1 pc", itemType: "Stationery", buyPrice: 30, sellPrice: 50 },
-          { productName: "Tea", ratePerUnit: "250 g", itemType: "Beverage", buyPrice: 90, sellPrice: 120 }
+          { productName: "Apple", itemType: "Fruit", buyPrice: 50, sellPrice: 70 },
+          { productName: "Rice", itemType: "Grain", buyPrice: 40, sellPrice: 55 }
         ];
         localStorage.setItem("products", JSON.stringify(products));
       }
