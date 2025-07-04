@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Products</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    table {
+      width: 80%;
+      margin: 0 auto;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      cursor: pointer;
+      background-color: #f2f2f2;
+      position: relative;
+    }
+    th:hover {
+      background-color: #e0e0e0;
+    }
+    th .arrow {
+      margin-left: 5px;
+      font-size: 12px;
+      visibility: hidden;
+    }
+    th.sorted-asc .arrow.up,
+    th.sorted-desc .arrow.down {
+      visibility: visible;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 5px;
+      margin: 5px;
+    }
+    #formContainer {
+      margin-top: 30px;
+    }
+    .hidden {
+      display: none;
+    }
+    #importExport {
+      margin-top: 30px;
+    }
+    #importLabel {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-left: 10px;
+    }
+    #fileInput {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>All Products</h1>
+  <input type="text" id="searchInput" onkeyup="searchProduct()" placeholder="Search by Product Name..." />
+
+  <table id="productTable">
+    <thead>
+      <tr>
+        <th onclick="sortTable(0, this)">Product Name <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th onclick="sortTable(1, this)">Rate Per Unit <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th onclick="sortTable(2, this)">Item Type <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th onclick="sortTable(3, this)">Buy Price <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+        <th onclick="sortTable(4, this)">Sell Price <span class="arrow up">&#9650;</span><span class="arrow down">&#9660;</span></th>
+      </tr>
+    </thead>
+    <tbody id="productBody"></tbody>
+  </table>
+
+  <div id="formContainer">
+    <h2>Add New Product</h2>
+    <input type="text" id="productName" placeholder="Product Name" />
+    <input type="text" id="ratePerUnit" placeholder="Rate Per Unit" />
+    <input type="text" id="itemType" placeholder="Item Type" />
+    <input type="number" id="buyPrice" placeholder="Buy Price" />
+    <input type="number" id="sellPrice" placeholder="Sell Price" />
+    <button onclick="addProduct()">Add Product</button>
+  </div>
+
+  <div id="importExport">
+    <button onclick="downloadBackup()">Download Backup</button>
+    <label id="importLabel" for="fileInput">Import Backup</label>
+    <input type="file" id="fileInput" accept="application/json" onchange="importBackup(event)" />
+  </div>
+
+  <script>
+    let products = [];
+    let currentSortColumn = null;
+    let currentSortDir = "asc";
+
+    function renderTable() {
+      const tbody = document.getElementById("productBody");
+      tbody.innerHTML = "";
+      products.forEach(product => {
+        const row = `<tr>
+          <td>${product.productName}</td>
+          <td>${product.ratePerUnit}</td>
+          <td>${product.itemType}</td>
+          <td>${product.buyPrice}</td>
+          <td>${product.sellPrice}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    }
+
+    function addProduct() {
+      const productName = document.getElementById("productName").value;
+      const ratePerUnit = document.getElementById("ratePerUnit").value;
+      const itemType = document.getElementById("itemType").value;
+      const buyPrice = parseFloat(document.getElementById("buyPrice").value);
+      const sellPrice = parseFloat(document.getElementById("sellPrice").value);
+
+      if (productName && ratePerUnit && itemType && !isNaN(buyPrice) && !isNaN(sellPrice)) {
+        const product = { productName, ratePerUnit, itemType, buyPrice, sellPrice };
+        products.push(product);
+        localStorage.setItem("products", JSON.stringify(products));
+        renderTable();
+      }
+    }
+
+    function searchProduct() {
+      const input = document.getElementById("searchInput").value.toUpperCase();
+      const rows = document.querySelectorAll("#productTable tbody tr");
+      rows.forEach(row => {
+        const cell = row.cells[0];
+        row.style.display = cell && cell.textContent.toUpperCase().includes(input) ? "" : "none";
+      });
+    }
+
+    function sortTable(colIndex, thElement) {
+      const ths = document.querySelectorAll("th");
+      ths.forEach(th => th.classList.remove("sorted-asc", "sorted-desc"));
+
+      if (currentSortColumn === colIndex) {
+        currentSortDir = currentSortDir === "asc" ? "desc" : "asc";
+      } else {
+        currentSortDir = "asc";
+      }
+
+      currentSortColumn = colIndex;
+      thElement.classList.add(currentSortDir === "asc" ? "sorted-asc" : "sorted-desc");
+
+      const keyMap = ["productName", "ratePerUnit", "itemType", "buyPrice", "sellPrice"];
+      const key = keyMap[colIndex];
+
+      products.sort((a, b) => {
+        let valA = a[key];
+        let valB = b[key];
+
+        if (typeof valA === "number" && typeof valB === "number") {
+          return currentSortDir === "asc" ? valA - valB : valB - valA;
+        }
+
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+        if (valA < valB) return currentSortDir === "asc" ? -1 : 1;
+        if (valA > valB) return currentSortDir === "asc" ? 1 : -1;
+        return 0;
+      });
+
+      renderTable();
+    }
+
+    function downloadBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products));
+      const a = document.createElement("a");
+      a.href = dataStr;
+      a.download = "products_backup.json";
+      a.click();
+    }
+
+    function importBackup(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          products = JSON.parse(e.target.result);
+          localStorage.setItem("products", JSON.stringify(products));
+          renderTable();
+        } catch (err) {
+          alert("Invalid JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function loadInitialProducts() {
+      const stored = localStorage.getItem("products");
+      if (stored) {
+        products = JSON.parse(stored);
+      } else {
+        products = [
+          { productName: "Apple", ratePerUnit: "1 kg", itemType: "Fruit", buyPrice: 50, sellPrice: 70 },
+          { productName: "Rice", ratePerUnit: "1 kg", itemType: "Grain", buyPrice: 40, sellPrice: 55 },
+          { productName: "Shampoo", ratePerUnit: "500 ml", itemType: "Toiletry", buyPrice: 120, sellPrice: 160 },
+          { productName: "Bread", ratePerUnit: "1 pack", itemType: "Bakery", buyPrice: 25, sellPrice: 35 },
+          { productName: "Milk", ratePerUnit: "1 litre", itemType: "Dairy", buyPrice: 30, sellPrice: 45 },
+          { productName: "Eggs", ratePerUnit: "12 pcs", itemType: "Poultry", buyPrice: 60, sellPrice: 80 },
+          { productName: "Tomato", ratePerUnit: "1 kg", itemType: "Vegetable", buyPrice: 20, sellPrice: 30 },
+          { productName: "Soap", ratePerUnit: "100 g", itemType: "Toiletry", buyPrice: 10, sellPrice: 15 },
+          { productName: "Notebook", ratePerUnit: "1 pc", itemType: "Stationery", buyPrice: 30, sellPrice: 50 },
+          { productName: "Tea", ratePerUnit: "250 g", itemType: "Beverage", buyPrice: 90, sellPrice: 120 }
+        ];
+        localStorage.setItem("products", JSON.stringify(products));
+      }
+      renderTable();
+    }
+
+    window.onload = loadInitialProducts;
+  </script>
+</body>
+</html>
