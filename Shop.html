@@ -1,201 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>All Products</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
+      margin: 0;
     }
+
     h2 {
       text-align: center;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
     }
+
     th, td {
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       padding: 10px;
       text-align: center;
     }
-    th.sortable {
+
+    th {
+      background-color: #f4f4f4;
       cursor: pointer;
-      user-select: none;
     }
-    th.sortable::after {
-      content: " \25B4";
-      font-size: 0.6em;
+
+    input[type="text"], input[type="number"] {
+      padding: 8px;
+      margin: 5px;
+      width: 200px;
     }
-    th.sortable.desc::after {
-      content: " \25BE";
+
+    button {
+      padding: 8px 15px;
+      margin: 5px;
+      cursor: pointer;
     }
+
     .action-btn {
-      margin: 0 4px;
+      padding: 5px 10px;
+      margin: 0 2px;
     }
+
     @media (max-width: 768px) {
       body {
         padding: 10px;
       }
+
       table {
-        display: block;
+        width: 100%;
         overflow-x: auto;
-        white-space: nowrap;
+        display: block;
       }
-      input, button {
+
+      th, td {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      input[type="text"], input[type="number"], button {
         width: 100%;
         margin: 8px 0;
         box-sizing: border-box;
       }
+
+      #formContainer, #importExport {
+        margin-top: 20px;
+      }
+
+      #importLabel {
+        display: block;
+        margin-top: 10px;
+      }
+
+      .action-btn {
+        margin: 4px 2px;
+        width: 48%;
+        font-size: 14px;
+      }
     }
   </style>
 </head>
+
 <body>
   <h2>All Products</h2>
-  <input type="text" id="searchInput" placeholder="Search by Product Name">
+
+  <input type="text" id="searchInput" placeholder="Search by Product Name" onkeyup="debouncedRender()">
 
   <table>
     <thead>
       <tr>
-        <th class="sortable" onclick="sortTable('productName')">Product Name</th>
-        <th class="sortable" onclick="sortTable('itemType')">Item Type</th>
-        <th class="sortable" onclick="sortTable('buyPrice')">Buy Price</th>
-        <th class="sortable" onclick="sortTable('sellPrice')">Sell Price</th>
-        <th class="sortable" onclick="sortTable('margin')">Margin</th>
+        <th onclick="sortTable('productName')">Product Name</th>
+        <th onclick="sortTable('itemType')">Item Type</th>
+        <th onclick="sortTable('buyPrice')">Buy Price</th>
+        <th onclick="sortTable('sellPrice')">Sell Price</th>
+        <th onclick="sortTable('margin')">Margin</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody id="productBody"></tbody>
   </table>
 
-  <h3 id="formTitle">Add Product</h3>
-  <input type="text" id="productName" placeholder="Product Name">
-  <input type="text" id="itemType" placeholder="Item Type">
-  <input type="number" id="buyPrice" placeholder="Buy Price">
-  <input type="number" id="sellPrice" placeholder="Sell Price">
-  <button id="submitButton" onclick="submitProduct()">Add Product</button>
+  <div id="formContainer">
+    <h3 id="formTitle">Add New Product</h3>
+    <input type="text" id="productName" placeholder="Product Name">
+    <input type="text" id="itemType" placeholder="Item Type">
+    <input type="number" id="buyPrice" placeholder="Buy Price">
+    <input type="number" id="sellPrice" placeholder="Sell Price">
+    <button onclick="submitProduct()" id="submitButton">Add Product</button>
+  </div>
+
+  <div id="importExport">
+    <button onclick="downloadBackup()">Download Backup</button>
+    <label id="importLabel">
+      <input type="file" id="importFile" onchange="importBackup()"> Import Backup
+    </label>
+  </div>
 
   <script>
     let products = JSON.parse(localStorage.getItem("products")) || [];
-    let editIndex = null;
-    let currentSort = { column: '', direction: 'asc' };
+    let editIndex = -1;
+    let sortDirection = {};
+    let debounceTimeout;
 
-    function debounce(func, delay) {
-      let timeout;
-      return function (...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), delay);
-      };
+    function debouncedRender() {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(renderTable, 200);
     }
 
     function renderTable() {
       const tbody = document.getElementById("productBody");
       tbody.innerHTML = "";
       const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-      const fragment = document.createDocumentFragment();
 
-      products.forEach((product) => {
+      products.forEach((product, index) => {
         if (product.productName.toLowerCase().includes(searchTerm)) {
-          const margin = product.sellPrice - product.buyPrice;
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
+          const margin = ((product.sellPrice - product.buyPrice).toFixed(2));
+          const row = `<tr>
             <td>${product.productName}</td>
             <td>${product.itemType}</td>
             <td>${product.buyPrice}</td>
             <td>${product.sellPrice}</td>
             <td>${margin}</td>
             <td>
-              <button class="action-btn" onclick="editProductByName('${product.productName}')">Edit</button>
-              <button class="action-btn" onclick="deleteProductByName('${product.productName}')">Delete</button>
-            </td>`;
-          fragment.appendChild(tr);
+              <button class="action-btn" onclick="editProduct(${index})">Edit</button>
+              <button class="action-btn" onclick="deleteProduct(${index})">Delete</button>
+            </td>
+          </tr>`;
+          tbody.innerHTML += row;
         }
       });
-      tbody.appendChild(fragment);
     }
 
     function submitProduct() {
-      const productName = document.getElementById("productName").value;
-      const itemType = document.getElementById("itemType").value;
+      const productName = document.getElementById("productName").value.trim();
+      const itemType = document.getElementById("itemType").value.trim();
       const buyPrice = parseFloat(document.getElementById("buyPrice").value);
       const sellPrice = parseFloat(document.getElementById("sellPrice").value);
 
-      if (!productName || isNaN(buyPrice) || isNaN(sellPrice)) return;
+      if (!productName || !itemType || isNaN(buyPrice) || isNaN(sellPrice)) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
 
       const newProduct = { productName, itemType, buyPrice, sellPrice };
 
-      if (editIndex !== null) {
+      if (editIndex >= 0) {
         products[editIndex] = newProduct;
-        editIndex = null;
+        editIndex = -1;
         document.getElementById("submitButton").innerText = "Add Product";
-        document.getElementById("formTitle").innerText = "Add Product";
+        document.getElementById("formTitle").innerText = "Add New Product";
       } else {
         products.push(newProduct);
       }
 
       localStorage.setItem("products", JSON.stringify(products));
-      renderTable();
       document.getElementById("productName").value = "";
       document.getElementById("itemType").value = "";
       document.getElementById("buyPrice").value = "";
       document.getElementById("sellPrice").value = "";
+      renderTable();
     }
 
-    function editProductByName(productName) {
-      const index = products.findIndex(p => p.productName === productName);
-      if (index !== -1) {
-        const product = products[index];
-        document.getElementById("productName").value = product.productName;
-        document.getElementById("itemType").value = product.itemType;
-        document.getElementById("buyPrice").value = product.buyPrice;
-        document.getElementById("sellPrice").value = product.sellPrice;
-        document.getElementById("submitButton").innerText = "Update Product";
-        document.getElementById("formTitle").innerText = "Edit Product";
-        editIndex = index;
-      }
+    function editProduct(index) {
+      const product = products[index];
+      document.getElementById("productName").value = product.productName;
+      document.getElementById("itemType").value = product.itemType;
+      document.getElementById("buyPrice").value = product.buyPrice;
+      document.getElementById("sellPrice").value = product.sellPrice;
+      document.getElementById("submitButton").innerText = "Update Product";
+      document.getElementById("formTitle").innerText = "Edit Product";
+      editIndex = index;
     }
 
-    function deleteProductByName(productName) {
-      const index = products.findIndex(p => p.productName === productName);
-      if (index !== -1 && confirm("Are you sure you want to delete this product?")) {
+    function deleteProduct(index) {
+      if (confirm("Are you sure you want to delete this product?")) {
         products.splice(index, 1);
         localStorage.setItem("products", JSON.stringify(products));
         renderTable();
       }
     }
 
-    function sortTable(column) {
-      const dir = currentSort.column === column && currentSort.direction === 'asc' ? 'desc' : 'asc';
-      currentSort = { column, direction: dir };
-      
+    function sortTable(key) {
+      const dir = sortDirection[key] = !sortDirection[key];
       products.sort((a, b) => {
-        let valA = column === 'margin' ? a.sellPrice - a.buyPrice : a[column];
-        let valB = column === 'margin' ? b.sellPrice - b.buyPrice : b[column];
-        
-        if (typeof valA === 'string') {
-          valA = valA.toLowerCase();
-          valB = valB.toLowerCase();
+        const aVal = key === 'margin' ? a.sellPrice - a.buyPrice : a[key];
+        const bVal = key === 'margin' ? b.sellPrice - b.buyPrice : b[key];
+        if (typeof aVal === "number") {
+          return dir ? aVal - bVal : bVal - aVal;
         }
-        
-        if (valA < valB) return dir === 'asc' ? -1 : 1;
-        if (valA > valB) return dir === 'asc' ? 1 : -1;
-        return 0;
+        return dir ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
       });
-
-      document.querySelectorAll("th.sortable").forEach(th => th.classList.remove("desc"));
-      if (dir === 'desc') {
-        document.querySelector(`th[onclick="sortTable('${column}')"]`).classList.add("desc");
-      }
-
       renderTable();
     }
 
-    document.getElementById("searchInput").addEventListener("input", debounce(renderTable, 300));
+    function downloadBackup() {
+      const blob = new Blob([JSON.stringify(products)], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "products_backup.json";
+      link.click();
+    }
+
+    function importBackup() {
+      const file = document.getElementById("importFile").files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          if (Array.isArray(importedData)) {
+            products = importedData;
+            localStorage.setItem("products", JSON.stringify(products));
+            renderTable();
+          } else {
+            alert("Invalid data format");
+          }
+        } catch {
+          alert("Error reading file");
+        }
+      };
+      reader.readAsText(file);
+    }
 
     renderTable();
   </script>
 </body>
+
 </html>
