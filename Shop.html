@@ -1,152 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>All Products</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      margin: 0;
     }
-
     h2 {
       text-align: center;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
     }
-
     th, td {
-      border: 1px solid #ddd;
+      border: 1px solid #ccc;
       padding: 10px;
       text-align: center;
     }
-
-    th {
-      background-color: #f4f4f4;
+    th.sortable {
       cursor: pointer;
+      user-select: none;
     }
-
-    th.sorted-asc::after {
-      content: " \25B2";
+    th.sortable::after {
+      content: " \25B4";
+      font-size: 0.6em;
     }
-
-    th.sorted-desc::after {
-      content: " \25BC";
+    th.sortable.desc::after {
+      content: " \25BE";
     }
-
-    input[type="text"], input[type="number"] {
-      padding: 8px;
-      margin: 5px;
-      width: 200px;
-    }
-
-    button {
-      padding: 8px 15px;
-      margin: 5px;
-      cursor: pointer;
-    }
-
     .action-btn {
-      padding: 5px 10px;
-      margin: 0 2px;
+      margin: 0 4px;
     }
-
     @media (max-width: 768px) {
       body {
         padding: 10px;
       }
-
       table {
-        width: 100%;
-        overflow-x: auto;
         display: block;
+        overflow-x: auto;
+        white-space: nowrap;
       }
-
-      th, td {
-        font-size: 14px;
-        padding: 8px;
-      }
-
-      input[type="text"], input[type="number"], button {
+      input, button {
         width: 100%;
         margin: 8px 0;
         box-sizing: border-box;
       }
-
-      #formContainer, #importExport {
-        margin-top: 20px;
-      }
-
-      #importLabel {
-        display: block;
-        margin-top: 10px;
-      }
-
-      .action-btn {
-        margin: 4px 2px;
-        width: 48%;
-        font-size: 14px;
-      }
     }
   </style>
 </head>
-
 <body>
   <h2>All Products</h2>
-
-  <input type="text" id="searchInput" placeholder="Search by Product Name" onkeyup="renderTable()">
+  <input type="text" id="searchInput" placeholder="Search by Product Name">
 
   <table>
     <thead>
       <tr>
-        <th onclick="sortTable('productName', this)">Product Name</th>
-        <th onclick="sortTable('itemType', this)">Item Type</th>
-        <th onclick="sortTable('buyPrice', this)">Buy Price</th>
-        <th onclick="sortTable('sellPrice', this)">Sell Price</th>
-        <th onclick="sortTable('margin', this)">Margin</th>
+        <th class="sortable" onclick="sortTable('productName')">Product Name</th>
+        <th class="sortable" onclick="sortTable('itemType')">Item Type</th>
+        <th class="sortable" onclick="sortTable('buyPrice')">Buy Price</th>
+        <th class="sortable" onclick="sortTable('sellPrice')">Sell Price</th>
+        <th class="sortable" onclick="sortTable('margin')">Margin</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody id="productBody"></tbody>
   </table>
 
-  <div id="formContainer">
-    <h3 id="formTitle">Add New Product</h3>
-    <input type="text" id="productName" placeholder="Product Name">
-    <input type="text" id="itemType" placeholder="Item Type">
-    <input type="number" id="buyPrice" placeholder="Buy Price">
-    <input type="number" id="sellPrice" placeholder="Sell Price">
-    <button onclick="submitProduct()" id="submitButton">Add Product</button>
-  </div>
-
-  <div id="importExport">
-    <button onclick="downloadBackup()">Download Backup</button>
-    <label id="importLabel">
-      <input type="file" id="importFile" onchange="importBackup()"> Import Backup
-    </label>
-  </div>
+  <h3 id="formTitle">Add Product</h3>
+  <input type="text" id="productName" placeholder="Product Name">
+  <input type="text" id="itemType" placeholder="Item Type">
+  <input type="number" id="buyPrice" placeholder="Buy Price">
+  <input type="number" id="sellPrice" placeholder="Sell Price">
+  <button id="submitButton" onclick="submitProduct()">Add Product</button>
 
   <script>
     let products = JSON.parse(localStorage.getItem("products")) || [];
-    let editIndex = -1;
-    let currentSort = { key: '', direction: 'asc' };
+    let editIndex = null;
+    let currentSort = { column: '', direction: 'asc' };
+
+    function debounce(func, delay) {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+      };
+    }
 
     function renderTable() {
       const tbody = document.getElementById("productBody");
       tbody.innerHTML = "";
       const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+      const fragment = document.createDocumentFragment();
 
       products.forEach((product) => {
         if (product.productName.toLowerCase().includes(searchTerm)) {
           const margin = product.sellPrice - product.buyPrice;
-          const row = `<tr>
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
             <td>${product.productName}</td>
             <td>${product.itemType}</td>
             <td>${product.buyPrice}</td>
@@ -155,46 +110,43 @@
             <td>
               <button class="action-btn" onclick="editProductByName('${product.productName}')">Edit</button>
               <button class="action-btn" onclick="deleteProductByName('${product.productName}')">Delete</button>
-            </td>
-          </tr>`;
-          tbody.innerHTML += row;
+            </td>`;
+          fragment.appendChild(tr);
         }
       });
+      tbody.appendChild(fragment);
     }
 
     function submitProduct() {
-      const productName = document.getElementById("productName").value.trim();
-      const itemType = document.getElementById("itemType").value.trim();
+      const productName = document.getElementById("productName").value;
+      const itemType = document.getElementById("itemType").value;
       const buyPrice = parseFloat(document.getElementById("buyPrice").value);
       const sellPrice = parseFloat(document.getElementById("sellPrice").value);
 
-      if (!productName || !itemType || isNaN(buyPrice) || isNaN(sellPrice)) {
-        alert("Please fill all fields correctly.");
-        return;
-      }
+      if (!productName || isNaN(buyPrice) || isNaN(sellPrice)) return;
 
       const newProduct = { productName, itemType, buyPrice, sellPrice };
 
-      if (editIndex >= 0) {
+      if (editIndex !== null) {
         products[editIndex] = newProduct;
-        editIndex = -1;
+        editIndex = null;
         document.getElementById("submitButton").innerText = "Add Product";
-        document.getElementById("formTitle").innerText = "Add New Product";
+        document.getElementById("formTitle").innerText = "Add Product";
       } else {
         products.push(newProduct);
       }
 
       localStorage.setItem("products", JSON.stringify(products));
+      renderTable();
       document.getElementById("productName").value = "";
       document.getElementById("itemType").value = "";
       document.getElementById("buyPrice").value = "";
       document.getElementById("sellPrice").value = "";
-      renderTable();
     }
 
-    function editProductByName(name) {
-      const index = products.findIndex(p => p.productName === name);
-      if (index >= 0) {
+    function editProductByName(productName) {
+      const index = products.findIndex(p => p.productName === productName);
+      if (index !== -1) {
         const product = products[index];
         document.getElementById("productName").value = product.productName;
         document.getElementById("itemType").value = product.itemType;
@@ -206,73 +158,44 @@
       }
     }
 
-    function deleteProductByName(name) {
-      const index = products.findIndex(p => p.productName === name);
-      if (index >= 0 && confirm("Are you sure you want to delete this product?")) {
+    function deleteProductByName(productName) {
+      const index = products.findIndex(p => p.productName === productName);
+      if (index !== -1 && confirm("Are you sure you want to delete this product?")) {
         products.splice(index, 1);
         localStorage.setItem("products", JSON.stringify(products));
         renderTable();
       }
     }
 
-    function sortTable(key, element) {
-      const isSameKey = currentSort.key === key;
-      currentSort.direction = isSameKey && currentSort.direction === 'asc' ? 'desc' : 'asc';
-      currentSort.key = key;
-
-      const ths = document.querySelectorAll('th');
-      ths.forEach(th => th.classList.remove('sorted-asc', 'sorted-desc'));
-      if (element) element.classList.add(`sorted-${currentSort.direction}`);
-
+    function sortTable(column) {
+      const dir = currentSort.column === column && currentSort.direction === 'asc' ? 'desc' : 'asc';
+      currentSort = { column, direction: dir };
+      
       products.sort((a, b) => {
-        let valA = key === 'margin' ? a.sellPrice - a.buyPrice : a[key];
-        let valB = key === 'margin' ? b.sellPrice - b.buyPrice : b[key];
-
-        if (typeof valA === "string") {
+        let valA = column === 'margin' ? a.sellPrice - a.buyPrice : a[column];
+        let valB = column === 'margin' ? b.sellPrice - b.buyPrice : b[column];
+        
+        if (typeof valA === 'string') {
           valA = valA.toLowerCase();
           valB = valB.toLowerCase();
         }
-
-        if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
-        if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+        
+        if (valA < valB) return dir === 'asc' ? -1 : 1;
+        if (valA > valB) return dir === 'asc' ? 1 : -1;
         return 0;
       });
+
+      document.querySelectorAll("th.sortable").forEach(th => th.classList.remove("desc"));
+      if (dir === 'desc') {
+        document.querySelector(`th[onclick="sortTable('${column}')"]`).classList.add("desc");
+      }
 
       renderTable();
     }
 
-    function downloadBackup() {
-      const blob = new Blob([JSON.stringify(products)], { type: "application/json" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "products_backup.json";
-      link.click();
-    }
-
-    function importBackup() {
-      const file = document.getElementById("importFile").files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        try {
-          const importedData = JSON.parse(e.target.result);
-          if (Array.isArray(importedData)) {
-            products = importedData;
-            localStorage.setItem("products", JSON.stringify(products));
-            renderTable();
-          } else {
-            alert("Invalid data format");
-          }
-        } catch {
-          alert("Error reading file");
-        }
-      };
-      reader.readAsText(file);
-    }
+    document.getElementById("searchInput").addEventListener("input", debounce(renderTable, 300));
 
     renderTable();
   </script>
 </body>
-
 </html>
