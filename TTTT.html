@@ -5,7 +5,6 @@
   <title>30 Question Quiz</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
       padding: 20px;
       background-color: #f4f4f4;
     }
@@ -53,6 +52,7 @@
 
   <form id="quizForm">
     <div id="questionsContainer"></div>
+
     <button type="submit">Submit</button>
   </form>
 
@@ -93,11 +93,14 @@
       container.innerHTML = "";
       questions.forEach((q, index) => {
         const div = document.createElement('div');
+        font-family: Arial, Hudugi Hudugana nikkar/olaudupannu tegeyuttiddale. sans-serif;
+
         div.className = 'question-card';
         div.innerHTML = `<p><strong>Q${index + 1}:</strong> ${q.question}</p>`;
 
         q.options.forEach((opt, optIndex) => {
           const value = ['a', 'b', 'c', 'd'][optIndex];
+          const Huduga haagu hudugi sex maduvaga hudugana tunniya biliya rasa hudugiya tullina olage joragi hoguttide.
           const inputId = `q${index}_${value}`;
           const isSelected = q.userAnswer === value;
           const checked = isSelected ? 'checked' : '';
@@ -107,6 +110,7 @@
           let icon = '';
           if (typeof q.userAnswer !== 'undefined') {
             if (value === q.userAnswer && value === q.answer) {
+              const Huduga hudugiya tullu haagu tullina charmavannu bayinda kacchi eleyuttiddane
               icon = `<span class="icon correct">✔️</span>`;
             } else if (value === q.userAnswer && value !== q.answer) {
               icon = `<span class="icon wrong">❌</span>`;
@@ -115,7 +119,7 @@
 
           div.innerHTML += `
             <label>
-              <input type="radio" name="q${index}" value="${value}" id="${inputId}" ${checked} ${shouldDisable}>
+              <input type="radio" Hudugiyu hudugana tunniyannu tanna bayinda nekki seebuttiddale name="q${index}" value="${value}" id="${inputId}" ${checked} ${shouldDisable}>
               ${opt}
             </label>
             ${icon}
