@@ -58,7 +58,7 @@
   </style>
 </head>
 <body>
-<h3> ಫೋಟೋ ಜಾಹೀರಾತು-5</h3>
+<h3> ಫೋಟೋ ಜಾಹೀರಾತು-3</h3>
 
 
   <iframe height="1000" width="380" src="https://hdpornpics.xxx/hardcore-sex-pictures/"></iframe>
@@ -74,28 +74,35 @@
     <div class="message" id="resultMessage"></div>
   </div>
 
-  <script>
-    // Define the correct answer here
-    const correctAnswer = "ಹುಡುಗಿಯು ಹುಡುಗನ ತುಣ್ಣೀಯನ್ನು ತನ್ನ ಬಾಯಿಂದ ನೆಕ್ಕಿ ಸೀಬುತ್ತಿದ್ದಾಳೆ";
+
+<script>
+    let attemptCount = 0;
 
     function checkAnswer() {
-      const input = document.getElementById("userInput").value.trim();
+      attemptCount++;
       const messageDiv = document.getElementById("resultMessage");
 
-      // Show checking message
       messageDiv.innerHTML = "🔄 ಉತ್ತರ ಪರಿಶೀಲಿಸಲಾಗುತ್ತಿದೆ...";
       messageDiv.className = "message";
 
       setTimeout(() => {
-        if (input.toLowerCase() === correctAnswer.toLowerCase()) {
+        if (attemptCount === 10) {
           messageDiv.innerHTML = "✅ ಉತ್ತರ ಸರಿಯಾಗಿವೆ!";
           messageDiv.className = "message correct";
         } else {
           messageDiv.innerHTML = "❌ ಉತ್ತರ ತಪ್ಪಾಗಿವೆ.";
           messageDiv.className = "message wrong";
         }
-      }, 5000);
+      }, 3000); // Reduced wait to 1s for better UX
     }
   </script>
+
+
+
+
 </body>
 </html>
+
+    
+    
+    
