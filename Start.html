@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blinking Hello</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #ffecd2, #fcb69f);
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
+    }
+
+    img {
+      width: 200px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .blinking-text {
+      font-size: 32px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff6a00, #ee0979, #00c9ff);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: blink 1s infinite, colorShift 5s infinite linear;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @keyframes colorShift {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+
+
+  <div class="blinking-text">Hello, Try Below Action For 30 Seconds and Go To Advertisement</div><br>
+  <!-- Replace the image src with your own if needed -->
+  <img src="Hand.png" alt="Sample Image">
+  <center><button><a href="#">-------GO TO ADVERTISEMENT---------</a><a href="https://givaxlksb.github.io/demo/Home.html">-</a></button></center>
+
+</body>
+</html>
