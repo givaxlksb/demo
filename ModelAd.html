@@ -6,6 +6,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Loading Page</title>
   <style>
+    /* Modal container (hidden by default) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    /* Modal content box */
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 30px;
+      border: 1px solid #888;
+      width: 300px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .checkmark {
+      font-size: 40px;
+      color: green;
+    }
+
+    .success-message {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #333;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      padding: 8px 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background-color: #218838;
+    }
     body {
       margin: 0;
       padding: 0;
@@ -46,20 +95,53 @@
   </style>
 </head>
 <body>
-<img src="logo.jpeg" alt="Logo" class="logo" />
-<h3><center>💰ವೈಫೈ & ಮೊಬೈಲ್ ಡೇಟಾ ಕನೆಕ್ಟ್ ಮಾಡಿ ಹಾಗು ಹಣಗಳಿಸಿ💰</center></h3>
-<h4> <u><center><font color="red">ನಿಮ್ಮ ಆಗಸ್ಟ್ 2025ರ ಆಫರ್ -  ಮೂರು ಟಾಸ್ಕ್ ಗಳನ್ನೂ ಪೂರ್ಣಗೊಳಿಸಿ</font></center></u></h4>
-<h4> <u>📌ಪ್ರತಿ 1 ವಾರಕ್ಕೆ <font color="red">ರೂ: 200/- </font></u></h4>
-
+<h4> <u><center><font color="black">ಫ್ಯಾಷನ್ - ಒಳಉಡುಪು ಟ್ರೈ - ಆನ್</font></center></u></h4>
+<img src="bgp.jpeg" alt="Logo" class="logo" />
 <p1>💠💠💠💠</p1>
-<p> <center><b><font color="blue">1) ವೀಡಿಯೊ - ಜಾಹೀರಾತುಗಳು</b></font></center> <br>
-    <center><b><font color="blue">2) ಫೋಟೋ - ಜಾಹೀರಾತುಗಳು</font></b></center> <br>
-    <center><b><font color="blue">3) ಫ್ಯಾಷನ್ - ಒಳಉಡುಪು ಟ್ರೈ - ಆನ್ </font></b></center>
-</p>
 
 
-  <!-- Replace with your logo path -->
-  <div class="spinner"></div>
-  <div class="loading-text"><b><a href="Start.html">ಆರಂಭಿಸಿ..</a></b></div>
+
+
+
+
+ <!-- Link to trigger the modal -->
+  <a href="#" id="successLink">Click Here to Show Success</a>
+
+  <!-- Modal structure -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <div class="checkmark">&#10004;</div> <!-- Unicode checkmark -->
+      <div class="success-message">Success!</div>
+      <button class="close-btn" id="closeModalBtn">OK</button>
+    </div>
+  </div>
+
+  <script>
+    const successLink = document.getElementById('successLink');
+    const modal = document.getElementById('successModal');
+    const closeBtn = document.getElementById('closeModalBtn');
+
+    // Show modal when link is clicked
+    successLink.addEventListener('click', function(event) {
+      event.preventDefault(); // prevent actual link behavior
+      modal.style.display = 'block';
+    });
+
+    // Close modal on button click
+    closeBtn.addEventListener('click', function() {
+      modal.style.display = 'none';
+    });
+
+    // Close modal if user clicks outside of modal content
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    }
+  </script>
+
+
+
+
 </body>
 </html>
