@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dress Order Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .product {
+      width: 350px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .details {
+      margin-top: 10px;
+    }
+    .details p {
+      margin: 6px 0;
+      font-size: 15px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .buy-btn {
+      margin-top: 25px;
+      display: block;
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 12px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .buy-btn:hover {
+      background: #218838;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .close-btn {
+      margin-top: 15px;
+      padding: 8px 16px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .close-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>🏷️🛍️ YouTube Orders 🛒</h1>
+  <div class="container">
+
+    <!-- Boy Dress -->
+    <div class="product" id="boy">
+      <img src="B_Dress.png" alt="Boy Dress">
+      <div class="details">
+        <h2>Boy's Try-On</h2>
+        <p><strong></strong> Boys Cotton Underwear Pack Of 3</p>
+        <p><strong>Size:</strong>
+          <select id="boy-size">
+            <option value="">Select Size</option>
+            <option>65 cm</option>
+            <option>75 cm</option>
+            <option>85 cm</option>
+            <option>90 cm</option>
+
+          </select>
+        </p>
+        <p><strong>Price:</strong> <del>(Rs: 299/-)</del> <font color="green"><b>Free Order</b></font></p>
+      </div>
+      <h3>Delivery Address</h3>
+      <input type="text" id="boy-name" placeholder="Customer Name">
+      <textarea id="boy-address" placeholder="Delivery Address"></textarea>
+      <input type="text" id="boy-phone" placeholder="Phone Number">
+    </div>
+
+    <!-- Girl Dress -->
+    <div class="product" id="girl">
+      <img src="GG_Dress.png" alt="Girl Dress">
+      <div class="details">
+        <h2>Girl's Try-On</h2>
+        <p><strong></strong> Girls Cotton Panty Pack Of 3</p>
+        <p><strong>Size:</strong>
+          <select id="girl-size">
+            <option value="">Select Size</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+          </select>
+        </p>
+        <p><strong>Price:</strong> <del>(Rs: 299/-)</del> <font color="green"><b>Free Order</b></font></p>
+      </div>
+      <h3>Delivery Address</h3>
+      <input type="text" id="girl-name" placeholder="Customer Name">
+      <textarea id="girl-address" placeholder="Delivery Address"></textarea>
+      <input type="text" id="girl-phone" placeholder="Phone Number">
+    </div>
+
+  </div>
+
+  <!-- Single Buy Button -->
+  <button class="buy-btn" onclick="placeOrder()">Buy Now</button>
+
+  <!-- Modal -->
+  <div class="modal" id="orderModal">
+    <div class="modal-content">
+      <h2>✅ Order Placed!</h2>
+      <p>Your order for both products has been placed successfully.</p>
+      <button class="close-btn" onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    function placeOrder() {
+      // Boy product values
+      let boyName = document.getElementById("boy-name").value.trim();
+      let boyAddr = document.getElementById("boy-address").value.trim();
+      let boyPhone = document.getElementById("boy-phone").value.trim();
+      let boySize = document.getElementById("boy-size").value.trim();
+
+      // Girl product values
+      let girlName = document.getElementById("girl-name").value.trim();
+      let girlAddr = document.getElementById("girl-address").value.trim();
+      let girlPhone = document.getElementById("girl-phone").value.trim();
+      let girlSize = document.getElementById("girl-size").value.trim();
+
+      // Check all fields filled
+      if (boyName && boyAddr && boyPhone && boySize &&
+          girlName && girlAddr && girlPhone && girlSize) {
+        document.getElementById("orderModal").style.display = "flex";
+      } else {
+        alert("⚠️ Please fill in ALL details for both products before placing order.");
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("orderModal").style.display = "none";
+    }
+  </script>
+</body>
+</html>
