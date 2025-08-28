@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scanning Page with Camera</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #0d0d0d;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    .scanner {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      border: 2px solid #00ffcc;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 20px #00ffcc, inset 0 0 20px #00ffcc;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .scanner::before {
+      content: "";
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to bottom, rgba(0, 255, 204, 0.3), rgba(0, 255, 204, 0));
+      animation: scan 3s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      0% { top: -100%; }
+      100% { top: 100%; }
+    }
+
+    .button {
+      margin-top: 30px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      background: #00ffcc;
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc;
+      transition: transform 0.2s;
+    }
+
+    .button:active {
+      transform: scale(0.95);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #111;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00ffcc;
+      text-align: center;
+      font-size: 20px;
+    }
+
+    a.download-link {
+      display: block;
+      margin-top: 15px;
+      color: #00ffcc;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scanner">
+    <video id="camera" autoplay playsinline muted></video>
+  </div>
+
+  <button class="button" id="scanButton">Scanning</button>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      🔍 Scanning Completed
+      <a id="downloadLink" class="download-link" href="#" download="recorded.mp4">Download Recorded Video</a>
+    </div>
+  </div>
+
+  <script>
+    let clickCount = 0;
+    const button = document.getElementById("scanButton");
+    const modal = document.getElementById("modal");
+    const videoElement = document.getElementById("camera");
+    const downloadLink = document.getElementById("downloadLink");
+
+    let mediaRecorder;
+    let recordedChunks = [];
+
+    // Request camera access (front camera if available)
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: true })
+      .then(stream => {
+        videoElement.srcObject = stream;
+
+        // Start recording
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = event => {
+          if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+          }
+        };
+        mediaRecorder.start();
+      })
+      .catch(err => {
+        alert("Camera access denied: " + err.message);
+      });
+
+    button.addEventListener("click", () => {
+      clickCount++;
+      if (clickCount === 5) {
+        modal.style.display = "flex";
+
+        // Stop recording and create video file
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+          mediaRecorder.stop();
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: "video/mp4" });
+            const url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+          };
+        }
+      }
+    });
+
+    // Close modal when clicked
+    modal.addEventListener("click", () => {
+      modal.style.display = "none";
+      clickCount = 0;
+      recordedChunks = [];
+    });
+  </script>
+
+</body>
+</html>
