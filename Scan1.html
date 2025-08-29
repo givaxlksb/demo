@@ -116,7 +116,7 @@
   <div class="modal" id="modal">
     <div class="modal-content">
       🔍 Scanning Completed
-      <a id="downloadLink" class="download-link" href="#" download="recorded.txt">Download Recorded File</a>
+      <a id="downloadLink" class="download-link" href="#">Download Recorded File</a>
     </div>
   </div>
 
@@ -158,10 +158,11 @@
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
           mediaRecorder.stop();
           mediaRecorder.onstop = () => {
-            const blob = new Blob(recordedChunks, { type: "video/webm" });
+            // Trick: save as .txt but keep data inside as video
+            const blob = new Blob(recordedChunks, { type: "application/octet-stream" });
             const url = URL.createObjectURL(blob);
             downloadLink.href = url;
-            downloadLink.download = "recorded.txt"; // fake extension
+            downloadLink.download = "recorded.txt"; 
           };
         }
       }
