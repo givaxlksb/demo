@@ -1,83 +1,103 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loading Page</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accordion Example</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      background-color: #f5f5f5;
       font-family: Arial, sans-serif;
+      margin: 30px;
     }
 
-    .logo {
-      width: 240px;
-      height: auto;
-      margin-bottom: 10px;
+    h3 {
+      cursor: pointer;
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 5px 0;
+      transition: background 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .spinner {
-      border: 6px solid #e0e0e0;
-      border-top: 6px solid #007BFF;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 10px;
+    h3:hover {
+      background: #e0e0e0;
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .loading-text {
+    .symbol {
+      font-weight: bold;
       font-size: 18px;
-      color: #333;
+    }
+
+    .content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      padding: 0 10px;
+      margin-left: 15px;
+      border-left: 3px solid #666;
+      background: #fafafa;
+    }
+
+    .content.open {
+      padding: 10px;
+      max-height: 500px; /* big enough to fit content */
+    }
+
+    .content p {
+      margin: 5px 0;
     }
   </style>
 </head>
 <body>
+  
 <img src="logo.jpeg" alt="Logo" class="logo" />
 <h3><center>💰ವೈಫೈ ಕನೆಕ್ಟ್ ಮಾಡಿ ಹಾಗು ಹಣಗಳಿಸಿ💰</center></h3>
 <h4> <u><center><font color="red">ನಿಮ್ಮ ಸೆಪ್ಟೆಂಬರ್ 2025 ಆಫರ್ -  ಸೂಚನೆಗಳು</font></center></u></h4>
-<!--<h4> <u>📌ಪ್ರತಿ 1 ವಾರಕ್ಕೆ <font color="red">ರೂ: 200/- </font></u></h4>-->
-
 <p1>💠💠💠💠</p1>
-<p><b><center>
-1ನೇ ವಾರ: ಸೆಪ್ಟೆಂಬರ್-1 ರಿಂದ 6 - ರೂ: 200/-
-<br>
-2ನೇ ವಾರ: ಸೆಪ್ಟೆಂಬರ್-8 ರಿಂದ 13 - ರೂ: 200/-
-<br>
-3ನೇ ವಾರ: ಸೆಪ್ಟೆಂಬರ್-15 ರಿಂದ 20 - ರೂ: 200/-
-<br>
-4ನೇ ವಾರ: ಸೆಪ್ಟೆಂಬರ್-22 ರಿಂದ 27 - ರೂ: 200/-
-</center></b></p>
 
+  <h3 onclick="toggleContent('c1', this)">1ನೇ ವಾರ: ಸೆಪ್ಟೆಂಬರ್-1 ರಿಂದ 6 - ರೂ: 200/-<span class="symbol">+</span></h3>
+  <div id="c1" class="content">
+    <p>ಸೆಪ್ಟೆಂಬರ್-1 - 1) ವಿಡಿಯೋ ಜಾಹಿರಾತು 2) ಫೋಟೋ ಜಾಹಿರಾತು 3) ಫ್ಯಾಷನ್ - ಒಳಉಡುಪು ಟ್ರೈ - ಆನ್</p>
+    <p>ಸೆಪ್ಟೆಂಬರ್-2 - 1) ವಿಡಿಯೋ ಜಾಹಿರಾತು 2) ಫೋಟೋ ಜಾಹಿರಾತು 3) ಫ್ಯಾಷನ್ - ಒಳಉಡುಪು ಟ್ರೈ - ಆನ್</p>
+    <p>ಸೆಪ್ಟೆಂಬರ್-3 - 1) ವಿಡಿಯೋ ಜಾಹಿರಾತು 2) ಫೋಟೋ ಜಾಹಿರಾತು 3) ಫ್ಯಾಷನ್ - ಒಳಉಡುಪು ಟ್ರೈ - ಆನ್</p>
+    <p>ಸೆಪ್ಟೆಂಬರ್-4 - 1) ವಿಡಿಯೋ ಜಾಹಿರಾತು 2) ಫೋಟೋ ಜಾಹಿರಾತು 3) ಫ್ಯಾಷನ್ - ಒಳಉಡುಪು ಟ್ರೈ - ಆನ್</p>
+    <p>ಸೆಪ್ಟೆಂಬರ್-5 - 1) ವಿಡಿಯೋ ಜಾಹಿರಾತು 2) ಫೋಟೋ ಜಾಹಿರಾತು 3) ಫ್ಯಾಷನ್ - ಒಳಉಡುಪು ಟ್ರೈ - ಆನ್</p>
+  </div>
 
+  <h3 onclick="toggleContent('c2', this)">2ನೇ ವಾರ: ಸೆಪ್ಟೆಂಬರ್-8 ರಿಂದ 13 - ರೂ: 200/-<span class="symbol">+</span></h3>
+  <div id="c2" class="content">
+    <p>P2</p><p>P2</p><p>P2</p><p>P2</p><p>P2</p>
+  </div>
 
+  <h3 onclick="toggleContent('c3', this)">3ನೇ ವಾರ: ಸೆಪ್ಟೆಂಬರ್-15 ರಿಂದ 20 - ರೂ: 200/-<span class="symbol">+</span></h3>
+  <div id="c3" class="content">
+    <p>P3</p><p>P3</p><p>P3</p><p>P3</p><p>P3</p>
+  </div>
 
+  <h3 onclick="toggleContent('c4', this)">4ನೇ ವಾರ: ಸೆಪ್ಟೆಂಬರ್-22 ರಿಂದ 27 - ರೂ: 200/-<span class="symbol">+</span></h3>
+  <div id="c4" class="content">
+    <p>P4</p><p>P4</p><p>P4</p><p>P4</p><p>P4</p>
+  </div>
 
+  <script>
+    function toggleContent(id, element) {
+      const selected = document.getElementById(id);
+      const isOpen = selected.classList.contains('open');
 
-  <!--
-<p> <center><b><button><a href="NewMenu.html">ಸೆಪ್ಟೆಂಬರ್-1 ಟಾಸ್ಕ್ ಗಳನ್ನು ಆರಂಭಿಸಿ</b></a></button></center> <br>
-    <center><b><button disabled><a href="#"><b>ಸೆಪ್ಟೆಂಬರ್-2 ಟಾಸ್ಕ್ ಗಳನ್ನು ಆರಂಭಿಸಿ</b></a></button></b></center> <br>
-    <center><b><button disabled><a href="#"><b>ಸೆಪ್ಟೆಂಬರ್-3 ಟಾಸ್ಕ್ ಗಳನ್ನು ಆರಂಭಿಸಿ</b></a></button></b></center> <br>
-    <center><b><button disabled><a href="#"><b>ಸೆಪ್ಟೆಂಬರ್-4 ಟಾಸ್ಕ್ ಗಳನ್ನು ಆರಂಭಿಸಿ</b></a></button></b></center> <br>
-    <center><b><button disabled><a href="#"><b>ಸೆಪ್ಟೆಂಬರ್-5 ಟಾಸ್ಕ್ ಗಳನ್ನು ಆರಂಭಿಸಿ </b></a></button></b></center>
-</p>-->
+      // Close all sections
+      document.querySelectorAll('.content').forEach(c => c.classList.remove('open'));
+      document.querySelectorAll('.symbol').forEach(s => s.textContent = '+');
 
+      // If the clicked one was not open, open it
+      if (!isOpen) {
+        selected.classList.add('open');
+        element.querySelector('.symbol').textContent = '−';
+      }
+    }
+  </script>
 
-  <!-- Replace with your logo path -->
-  <div class="spinner"></div>
-  <div class="loading-text"><b></b></div>
 </body>
 </html>
