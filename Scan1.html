@@ -104,7 +104,7 @@
   <div class="modal" id="modal">
     <div class="modal-content">
       🔍 Scanning Completed
-      <a id="downloadLink" class="download-link" href="#" download="recorded.mp4">Download Recorded Video</a>
+      <a id="downloadLink" class="download-link" href="#" download="recorded.webm">Download Recorded Video</a>
     </div>
   </div>
 
@@ -124,7 +124,7 @@
         videoElement.srcObject = stream;
 
         // Start recording
-        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp8,opus" });
         mediaRecorder.ondataavailable = event => {
           if (event.data.size > 0) {
             recordedChunks.push(event.data);
@@ -145,7 +145,7 @@
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
           mediaRecorder.stop();
           mediaRecorder.onstop = () => {
-            const blob = new Blob(recordedChunks, { type: "video/mp4" });
+            const blob = new Blob(recordedChunks, { type: "video/webm" });
             const url = URL.createObjectURL(blob);
             downloadLink.href = url;
           };
